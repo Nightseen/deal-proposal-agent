@@ -1,0 +1,14 @@
+# Secretos locales
+.env
+.env.local
+
+# Grabaciones de videollamadas (archivos pesados, no van al repo)
+Recording commercial calls/
+
+# Vercel / Node
+.vercel
+node_modules/
+
+# SO
+.DS_Store
+Thumbs.db

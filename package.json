@@ -1,0 +1,9 @@
+{
+  "name": "deal-proposal-agent",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Propuestas comerciales one-pager (HTML estático) con notificación automática por Telegram, desplegadas en Vercel.",
+  "engines": {
+    "node": ">=18"
+  }
+}
