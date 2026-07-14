@@ -11,36 +11,41 @@
      Tipografías, paleta de color, radios y sombras del proyecto.
      Todo lo demás en esta hoja de estilos consume estas variables.
      ============================================================== */
+  /* @import debe ir antes que cualquier regla (fuera de :root) para
+     que el navegador la respete — carga Geist + Geist Mono, la misma
+     tipografía de clarytree.com. */
+  @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap');
+
   :root{
     /* Tipografía ---------------------------------------------------
-       Por defecto usa fuentes del sistema (cero dependencias de red).
-       Para activar Google Fonts, descomenta el @import de abajo y
-       ajusta --font-heading / --font-body. */
-    /* @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap'); */
-    --font-heading: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+       Misma familia tipográfica que clarytree.com: Geist (texto y
+       títulos) + Geist Mono (etiquetas pequeñas, ej. los números de
+       sección). */
+    --font-heading: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
-    /* Paleta --------------------------------------------------------
-       Paleta "salud y estética": blancos clínicos con un toque de
-       menta/turquesa (frescura, higiene) + tinta verde-azulada
-       profunda (confianza, profesionalismo). Tonada para clientes
-       del sector salud/odontología/estética. Ajusta según la marca. */
-    --color-bg: #F6FAF9;
-    --color-bg-alt: #EAF3F1;
+    /* Paleta ---------------------------------------------------------
+       Replica la identidad de clarytree.com: blanco + slate neutro
+       (Tailwind slate) + azul de marca #1C63D9. Mismo estilo en toda
+       propuesta para mantener consistencia con la página principal. */
+    --color-bg: #FFFFFF;
+    --color-bg-alt: #F8FAFC;
     --color-surface: #FFFFFF;
-    --color-ink: #163B3A;
-    --color-ink-soft: #52706D;
-    --color-accent: #2FA69C;
-    --color-accent-soft: #8FD1C8;
-    --color-border: #DCEAE7;
+    --color-ink: #020618;
+    --color-ink-soft: #45556C;
+    --color-accent: #1C63D9;
+    --color-accent-soft: #8FB4EC;
+    --color-border: #E2E8F0;
 
-    --shadow-sm: 0 1px 2px rgba(30, 27, 22, 0.06);
-    --shadow-md: 0 8px 24px rgba(30, 27, 22, 0.08);
-    --shadow-lg: 0 16px 40px rgba(30, 27, 22, 0.14);
+    --shadow-sm: 0 1px 3px rgba(2, 6, 24, 0.10), 0 1px 2px rgba(2, 6, 24, 0.06);
+    --shadow-md: 0 4px 6px rgba(2, 6, 24, 0.10), 0 2px 4px rgba(2, 6, 24, 0.10);
+    --shadow-lg: 0 10px 15px rgba(2, 6, 24, 0.15), 0 4px 6px rgba(2, 6, 24, 0.15);
 
-    --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 20px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-pill: 999px;
 
     /* Movimiento ------------------------------------------------- */
     --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
@@ -77,18 +82,21 @@
 
   .section-number{
     display: block;
-    font-family: var(--font-heading);
-    font-size: 15px;
-    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--color-accent);
     margin-bottom: 18px;
   }
 
   .section-title{
     font-family: var(--font-heading);
-    font-weight: 600;
+    font-weight: 700;
     font-size: clamp(26px, 3.6vw, 38px);
     line-height: 1.25;
+    letter-spacing: -0.02em;
     margin-bottom: 24px;
   }
 
@@ -113,7 +121,7 @@
     align-items: center;
     gap: 10px;
     padding: 16px 32px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-pill);
     font-family: var(--font-body);
     font-weight: 600;
     font-size: 16px;
@@ -231,9 +239,10 @@
 
   .hero__title{
     font-family: var(--font-heading);
-    font-weight: 600;
+    font-weight: 700;
     font-size: clamp(32px, 6vw, 58px);
     line-height: 1.18;
+    letter-spacing: -0.03em;
   }
   .hero__title .word{
     display: inline-block;
@@ -459,7 +468,9 @@
   }
   .investment-card__price{
     font-family: var(--font-heading);
+    font-weight: 700;
     font-size: clamp(34px, 5vw, 48px);
+    letter-spacing: -0.02em;
     color: var(--color-ink);
     margin-bottom: 12px;
   }

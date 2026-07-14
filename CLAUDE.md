@@ -23,6 +23,19 @@ Por qué vía función serverless y no JS directo en el navegador: el bot token 
 
 `TELEGRAM_BOT_TOKEN` y `TELEGRAM_USER_ID` son fijos de la empresa y no cambian entre propuestas: van en `.env` (local) y en las variables de entorno del proyecto en Vercel (producción).
 
+## Sistema de diseño: debe replicar clarytree.com
+
+El sistema de diseño de `plantilla_propuestas.html` (bloque `:root` al inicio del `<style>`) está calcado del sitio principal **clarytree.com**, para que toda propuesta se sienta parte de la misma marca. Si clarytree.com cambia su diseño, este bloque debe actualizarse a la par. Tokens actuales (extraídos del sitio real, no inventados):
+
+- Tipografía: **Geist** (texto y títulos) + **Geist Mono** (etiquetas pequeñas como los números de sección), cargadas vía `@import` de Google Fonts justo antes de `:root{` (un `@import` dentro de una regla es inválido — debe ir suelto).
+- Color: fondo blanco / `#F8FAFC` (slate-50) alterno, texto `#020618` (títulos) y `#45556C` (cuerpo), acento azul de marca `#1C63D9`.
+- Botones: siempre pill (`--radius-pill: 999px`), nunca esquinas cuadradas.
+- Tarjetas: esquinas muy redondeadas (`--radius-lg: 22px`).
+- Sombras y colores tintados con el tono de tinta (`rgba(2,6,24,...)`), no negro puro.
+- Títulos con tracking negativo (`letter-spacing` ligeramente negativo) para el look "tech" del sitio.
+
+No cambiar la estructura de las 9 secciones ni las animaciones por esto — solo los tokens visuales (tipografía, color, radios, sombras) deben coincidir con la marca.
+
 ## CTA de WhatsApp
 
 El botón CTA final (sección 09) apunta siempre a `https://wa.me/573115118640` (WhatsApp fijo de la empresa), con `target="_blank" rel="noopener"`. No es una variable `[VARIABLE]` — es fijo en la plantilla, igual que el logo. El texto del botón sí es editable vía `[TEXTO_CTA]`.
