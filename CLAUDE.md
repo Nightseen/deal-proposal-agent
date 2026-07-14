@@ -9,6 +9,8 @@ Genera propuestas comerciales one-pager (HTML estático) a partir de una plantil
 - `api/notify.js` — función serverless (Vercel, runtime Node) que envía el aviso de Telegram. No tiene lógica de negocio adicional.
 - `assets/` — imágenes fuente (ej. logo) usadas para generar los `data:` URIs embebidos en el HTML.
 - `.env` / `.env.example` — variables de entorno. `.env` nunca se commitea.
+- `.claude/skills/generador-propuestas-comerciales/` — skill (`/generador-propuestas-comerciales`) que arma una propuesta nueva completa a partir de la grabación de la llamada de ventas con el cliente: transcribe con AssemblyAI, analiza la transcripción y genera `<slug>/index.html`. Ver el `SKILL.md` de esa carpeta para el flujo completo.
+- `transcripts/` — transcripciones generadas por el skill (gitignored, pueden tener info de clientes).
 
 ## Feature obligatorio: notificación por Telegram al abrir la propuesta
 

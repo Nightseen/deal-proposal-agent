@@ -5,6 +5,9 @@
 # Grabaciones de videollamadas (archivos pesados, no van al repo)
 Recording commercial calls/
 
+# Transcripciones generadas localmente (pueden contener info de clientes)
+transcripts/
+
 # Vercel / Node
 .vercel
 node_modules/
