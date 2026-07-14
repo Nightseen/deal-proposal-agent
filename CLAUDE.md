@@ -40,6 +40,12 @@ No cambiar la estructura de las 9 secciones ni las animaciones por esto — solo
 
 El botón CTA final (sección 09) apunta siempre a `https://wa.me/573115118640` (WhatsApp fijo de la empresa), con `target="_blank" rel="noopener"`. No es una variable `[VARIABLE]` — es fijo en la plantilla, igual que el logo. El texto del botón sí es editable vía `[TEXTO_CTA]`.
 
+## Datos fijos de la empresa
+
+Además del logo y el WhatsApp del CTA, estos dos también son texto fijo (no variables) en toda propuesta:
+- Nombre de la empresa: **ClaryTree Clinics** (`<title>` y pie de la sección de cierre).
+- Contacto: **contacto.clarytree@gmail.com** (pie de la sección de cierre).
+
 ## Al crear una propuesta nueva
 
 1. Duplicar `plantilla_propuestas.html` en `<slug>/index.html`.
