@@ -44,7 +44,9 @@ Lee toda la transcripción con atención — no la resumas por encima — y extr
 
 Con todo esto, redacta el contenido de cada sección de la propuesta (ver `references/data-schema.md` para el mapeo exacto campo→placeholder). La propuesta debe sonar hecha a la medida de esta clínica puntual, no un texto genérico con find-and-replace del nombre.
 
-**Antes de construir la propuesta**, revisa si te falta algo imprescindible que la transcripción no cubrió (ej. forma de pago, tiempos de fase, diferenciadores concretos) y pregúntaselo al usuario. No inventes datos duros (precios, plazos, alcance) que nadie te dio — sí puedes redactar libremente el tono/prosa de los párrafos.
+**Tiempos de la sección "Cómo trabajamos" (`fases`)**: por defecto, el tiempo total de implementación (suma de las fases) es de **máximo 1 semana si la clínica es multisede**, o **menos de 1 semana si es unisede** — a menos que la transcripción indique explícitamente otros plazos (ej. el cliente pidió integraciones complejas, o el closer prometió un plazo distinto). Ajusta la cantidad y duración de fases individuales dentro de ese total según lo que tenga sentido para el alcance acordado. Conserva siempre `[NOTA_TIEMPOS]` con la aclaración de que los tiempos son aproximados.
+
+**Antes de construir la propuesta**, revisa si te falta algo imprescindible que la transcripción no cubrió (ej. condiciones de flexibilidad de pago si las hay) y pregúntaselo al usuario. No inventes datos duros (precios, alcance) que nadie te dio — sí puedes redactar libremente el tono/prosa de los párrafos, y aplicar el default de tiempos de arriba si la llamada no especificó plazos. La sección "Por qué confiar en nosotros" es estática (módulo fijo "Resultados comprobados") — no le pidas diferenciadores, garantía, credenciales ni testimonio al usuario, ya no aplican.
 
 ## Paso 3 — Construir la propuesta
 

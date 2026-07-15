@@ -13,9 +13,8 @@
 // {
 //   "slug": "propuesta-clinica-sonrisa-real",
 //   "fecha": "14 de julio de 2026",
-//   "tipoDeServicio": "...",
+//   "numeroPropuesta": "PROP-2026-002 (opcional, se autogenera si se omite)",
 //   "nombreCliente": "...",
-//   "nombreProyecto": "...",
 //   "parrafoEntendimiento": "...",
 //   "parrafoVision": "...",
 //   "imagenVision": "https://... (opcional, omitir si no hay)",
@@ -24,14 +23,13 @@
 //   "fases": [{ "nombre": "...", "descripcion": "...", "tiempo": "..." }, ...],
 //   "notaTiempos": "...",
 //   "precio": "...",
-//   "formaDePago": "...",
-//   "diferenciadores": ["...", "...", "..."],
-//   "garantia": "...",
-//   "credenciales": "... (opcional)",
-//   "testimonio": "... (opcional)",
+//   "formaDePago": "... (opcional, omitir si no hay flexibilidad de pago)",
 //   "parrafoCierre": "...",
 //   "textoCta": "..."
 // }
+//
+// La sección 08 ("Por qué confiar en nosotros") es estática (módulo fijo
+// "Resultados comprobados") y no toma datos de este JSON.
 
 const fs = require('fs');
 const path = require('path');
@@ -49,6 +47,15 @@ function esc(str) {
   return String(str == null ? '' : str);
 }
 
+function nextProposalNumber(root, year) {
+  const entries = fs.readdirSync(root, { withFileTypes: true });
+  const count = entries.filter((e) => {
+    if (!e.isDirectory() || e.name === 'propuesta-demo' || !e.name.startsWith('propuesta-')) return false;
+    return fs.existsSync(path.join(root, e.name, 'index.html'));
+  }).length;
+  return `PROP-${year}-${String(count + 1).padStart(3, '0')}`;
+}
+
 function buildScopeHtml(items) {
   return items
     .map(
@@ -61,7 +68,13 @@ function buildScopeHtml(items) {
 }
 
 function buildExclusionsHtml(items) {
-  return items.map((text) => `<li class="exclusion-item">${esc(text)}</li>`).join('\n        ');
+  return items
+    .map(
+      (text) => `<li class="card">
+            <h3 class="scope-card__title">${esc(text)}</h3>
+          </li>`
+    )
+    .join('\n        ');
 }
 
 function buildPhasesHtml(phases) {
@@ -107,6 +120,11 @@ function main() {
     html = html.replace(/\s*<!-- OPCIONAL: si no hay \[IMAGEN_VISION\][\s\S]*?<\/div>\n/, '\n');
   }
 
+  // 2b. Forma de pago opcional: si no se da, se quita el párrafo entero.
+  if (!data.formaDePago) {
+    html = html.replace(/\s*<!-- OPCIONAL: si no hay \[FORMA_DE_PAGO\][\s\S]*?<\/p>\n/, '\n');
+  }
+
   // 3. Quitar los comentarios-receta antes de reemplazar los bloques
   //    únicos (si no, el placeholder dentro del comentario se
   //    reemplaza primero y el real queda intacto).
@@ -117,24 +135,17 @@ function main() {
   // 4. Placeholders simples
   const simple = {
     FECHA: data.fecha,
-    TIPO_DE_SERVICIO: data.tipoDeServicio,
+    NUMERO_PROPUESTA: data.numeroPropuesta || nextProposalNumber(root, new Date().getFullYear()),
     NOMBRE_CLIENTE: data.nombreCliente,
-    NOMBRE_PROYECTO: data.nombreProyecto,
     PARRAFO_ENTENDIMIENTO: data.parrafoEntendimiento,
     PARRAFO_VISION: data.parrafoVision,
     NOTA_TIEMPOS: data.notaTiempos,
     PRECIO: data.precio,
-    FORMA_DE_PAGO: data.formaDePago,
-    DIFERENCIADOR_1: data.diferenciadores && data.diferenciadores[0],
-    DIFERENCIADOR_2: data.diferenciadores && data.diferenciadores[1],
-    DIFERENCIADOR_3: data.diferenciadores && data.diferenciadores[2],
-    GARANTIA: data.garantia,
-    CREDENCIALES: data.credenciales,
-    TESTIMONIO: data.testimonio,
     PARRAFO_CIERRE: data.parrafoCierre,
     TEXTO_CTA: data.textoCta,
   };
   if (data.imagenVision) simple.IMAGEN_VISION = data.imagenVision;
+  if (data.formaDePago) simple.FORMA_DE_PAGO = data.formaDePago;
 
   for (const [key, value] of Object.entries(simple)) {
     const token = `[${key}]`;
@@ -146,11 +157,6 @@ function main() {
   html = html.replace('[LISTA_ALCANCE]', buildScopeHtml(data.alcance || []));
   html = html.replace('[LISTA_EXCLUSIONES]', buildExclusionsHtml(data.exclusiones || []));
   html = html.replace('[FASES]', buildPhasesHtml(data.fases || []));
-
-  // 6. Si no hubo credenciales/testimonio, quitar el bloque opcional entero
-  if (!data.credenciales && !data.testimonio) {
-    html = html.replace(/\s*<!-- OPCIONAL: eliminar este bloque si no aplica -->[\s\S]*?<\/div>\n/, '\n');
-  }
 
   const remaining = html.match(/\[[A-Z_0-9]+\]/g);
   if (remaining) {
