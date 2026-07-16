@@ -56,10 +56,13 @@ function nextProposalNumber(root, year) {
   return `PROP-${year}-${String(count + 1).padStart(3, '0')}`;
 }
 
+const SCOPE_ICONS = ['icon-check', 'icon-chat', 'icon-calendar', 'icon-chart'];
+
 function buildScopeHtml(items) {
   return items
     .map(
-      (item) => `<article class="card scope-card">
+      (item, i) => `<article class="card card--icon scope-card">
+            <span class="card__icon"><svg><use href="#${SCOPE_ICONS[i % SCOPE_ICONS.length]}"></use></svg></span>
             <h3 class="scope-card__title">${esc(item.titulo)}</h3>
             <p class="scope-card__desc">${esc(item.descripcion)}</p>
           </article>`
@@ -70,7 +73,8 @@ function buildScopeHtml(items) {
 function buildExclusionsHtml(items) {
   return items
     .map(
-      (text) => `<li class="card">
+      (text) => `<li class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-ban"></use></svg></span>
             <h3 class="scope-card__title">${esc(text)}</h3>
           </li>`
     )
@@ -158,7 +162,10 @@ function main() {
   html = html.replace('[LISTA_EXCLUSIONES]', buildExclusionsHtml(data.exclusiones || []));
   html = html.replace('[FASES]', buildPhasesHtml(data.fases || []));
 
-  const remaining = html.match(/\[[A-Z_0-9]+\]/g);
+  // Un placeholder real siempre empieza con letra mayúscula ([FECHA], etc.).
+  // Exigirlo evita falsos positivos con índices de array del JS embebido en la
+  // plantilla (p[0], s[1], path[0]), que si no se confundirían con placeholders.
+  const remaining = html.match(/\[[A-Z][A-Z_0-9]*\]/g);
   if (remaining) {
     console.error('Placeholders sin reemplazar (faltan datos en el JSON):', remaining.join(', '));
     process.exit(1);

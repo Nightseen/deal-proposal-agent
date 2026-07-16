@@ -1,0 +1,7 @@
+{
+  "files": ["plantilla_propuestas.html", "*/index.html"],
+  "exclude": [],
+  "insertBefore": "</body>",
+  "commentSyntax": "html",
+  "cspChecked": true
+}

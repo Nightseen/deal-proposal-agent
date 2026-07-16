@@ -11,8 +11,8 @@ Mapeo de cada campo del JSON al placeholder que reemplaza en `plantilla_propuest
 | `parrafoEntendimiento` | `[PARRAFO_ENTENDIMIENTO]` | Bloque único — párrafo completo. |
 | `parrafoVision` | `[PARRAFO_VISION]` | Bloque único — párrafo completo. |
 | `imagenVision` | `[IMAGEN_VISION]` | Opcional. Si se omite (no incluir la clave o dejarla vacía/null), el script quita toda la capa de parallax de la sección de visión. |
-| `alcance` | `[LISTA_ALCANCE]` | Arreglo de `{ "titulo": "...", "descripcion": "..." }`, 4–8 ítems recomendado. |
-| `exclusiones` | `[LISTA_EXCLUSIONES]` | Arreglo de strings. Cada string se renderiza como título en negrilla dentro de una tarjeta `.card` — mismo estilo y clases (`.scope-card__title`) que Alcance. |
+| `alcance` | `[LISTA_ALCANCE]` | Arreglo de `{ "titulo": "...", "descripcion": "..." }`, 4–8 ítems recomendado. Cada tarjeta se genera con un contenedor de ícono (`.card__icon`) en la esquina superior izquierda; `build-proposal.js` rota el ícono automáticamente entre `#icon-check`, `#icon-chat`, `#icon-calendar` e `#icon-chart` según la posición del ítem — no hace falta ni se puede elegir el ícono desde el JSON. |
+| `exclusiones` | `[LISTA_EXCLUSIONES]` | Arreglo de strings. Cada string se renderiza como título en negrilla dentro de una tarjeta `.card` — mismo estilo y clases (`.scope-card__title`) que Alcance, con el mismo contenedor de ícono pero siempre con `#icon-ban`. |
 | `fases` | `[FASES]` | Arreglo de `{ "nombre": "...", "descripcion": "...", "tiempo": "..." }`. El número de fase (01, 02...) se genera solo según el orden del arreglo. |
 | `notaTiempos` | `[NOTA_TIEMPOS]` | Aclaración de que los tiempos son aproximados. Ver regla de tiempos por defecto en `SKILL.md` (máx. 1 semana multisede / menos de 1 semana unisede, salvo que la llamada indique otra cosa). |
 | `precio` | `[PRECIO]` | Ya formateado como texto a mostrar (ej. `"$4.200.000 COP"`). |
@@ -20,4 +20,4 @@ Mapeo de cada campo del JSON al placeholder que reemplaza en `plantilla_propuest
 | `parrafoCierre` | `[PARRAFO_CIERRE]` | Bloque único. |
 | `textoCta` | `[TEXTO_CTA]` | Texto del botón final (ej. "Hablemos por WhatsApp"). |
 
-Campos que **no** van en este JSON porque ya son fijos en la plantilla (no se tocan): logo, wordmark "ClaryTree", `NOMBRE_EMPRESA` ("ClaryTree Clinics"), `CONTACTO` (contacto.clarytree@gmail.com), el WhatsApp del CTA final, la barra de navegación fija con progreso de scroll, el script de notificación por Telegram, y la sección 08 completa ("Por qué confiar en nosotros" / módulo "Resultados comprobados" — estática, ya no toma diferenciadores/garantía/credenciales/testimonio del cliente).
+Campos que **no** van en este JSON porque ya son fijos en la plantilla (no se tocan): logo, wordmark "ClaryTree", `NOMBRE_EMPRESA` ("ClaryTree Clinics"), `CONTACTO` (contacto.clarytree@gmail.com), el WhatsApp del CTA final, la barra de navegación fija con progreso de scroll, el script de notificación por Telegram, el sprite de íconos SVG (`<svg id="icon-sprite">` justo después de `<body>`), el video de fondo del hero (`/assets/hero-v6-loop.mp4`, fijo), y la sección 08 completa ("Por qué confiar en nosotros" / módulo "Resultados comprobados" — estática, ya no toma diferenciadores/garantía/credenciales/testimonio del cliente, incluidos sus íconos fijos por métrica).

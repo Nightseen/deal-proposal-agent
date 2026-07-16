@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-16T00:00:00.000Z",
+  "title": "Design System: ClaryTree Propuestas Comerciales",
+  "extensions": {
+    "colorMeta": {
+      "brand-blue": { "role": "primary", "displayName": "Azul ClaryTree", "canonical": "#1C63D9", "tonalRamp": ["#0A1B3D", "#0F2C63", "#153F8C", "#1C63D9", "#4A83E1", "#8FB4EC", "#C4D9F6", "#EEF4FC"] },
+      "brand-blue-soft": { "role": "primary", "displayName": "Azul Suave", "canonical": "#8FB4EC", "tonalRamp": ["#1C63D9", "#4A83E1", "#6FA0E8", "#8FB4EC", "#ACC7F1", "#C9DAF5", "#E4ECFA", "#F5F8FD"] },
+      "accent-cyan": { "role": "tertiary", "displayName": "Cyan de Acento", "canonical": "#06B6D4", "tonalRamp": ["#053840", "#075361", "#097086", "#06B6D4", "#3FD0E8", "#7DE0F0", "#B3EDF6", "#E2F9FC"] },
+      "accent-cyan-text": { "role": "tertiary", "displayName": "Cyan Texto", "canonical": "#0E7490", "tonalRamp": ["#062F3A", "#0A4759", "#0C5F77", "#0E7490", "#3A93AC", "#6FB4C7", "#A8D5E1", "#DCF0F5"] },
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#020618", "tonalRamp": ["#000000", "#020618", "#0B1220", "#1C2333", "#45556C", "#8494AC", "#C4CEDD", "#F1F4F9"] },
+      "ink-soft": { "role": "neutral", "displayName": "Tinta Suave", "canonical": "#45556C", "tonalRamp": ["#020618", "#1C2333", "#2E3B52", "#45556C", "#64748B", "#94A3B8", "#CBD5E1", "#F1F5F9"] },
+      "bg": { "role": "neutral", "displayName": "Blanco", "canonical": "#FFFFFF", "tonalRamp": ["#E2E8F0", "#EDF1F6", "#F4F7FA", "#F8FAFC", "#FBFCFD", "#FFFFFF", "#FFFFFF", "#FFFFFF"] },
+      "bg-alt": { "role": "neutral", "displayName": "Blanco Roto", "canonical": "#F8FAFC", "tonalRamp": ["#CBD5E1", "#DCE4EC", "#EAEFF4", "#F1F5F9", "#F5F8FB", "#F8FAFC", "#FBFCFD", "#FFFFFF"] },
+      "surface": { "role": "neutral", "displayName": "Superficie", "canonical": "#FFFFFF", "tonalRamp": ["#E2E8F0", "#EDF1F6", "#F4F7FA", "#F8FAFC", "#FBFCFD", "#FFFFFF", "#FFFFFF", "#FFFFFF"] },
+      "border": { "role": "neutral", "displayName": "Borde", "canonical": "#E2E8F0", "tonalRamp": ["#94A3B8", "#AEBBCB", "#C6D0DC", "#E2E8F0", "#EAEEF3", "#F1F4F8", "#F7F9FB", "#FCFDFE"] },
+      "navy-deep": { "role": "neutral", "displayName": "Navy Profundo", "canonical": "#0E1A33", "tonalRamp": ["#050A14", "#080F20", "#0B142A", "#0E1A33", "#1C3357", "#3A5787", "#7C9BC2", "#C7D6EA"] },
+      "cyan-bright": { "role": "tertiary", "displayName": "Cyan Brillante", "canonical": "#22D3EE", "tonalRamp": ["#083944", "#0C5768", "#118097", "#22D3EE", "#5EE0F2", "#93EAF7", "#C6F4FB", "#E8FBFD"] },
+      "ink-900": { "role": "neutral", "displayName": "Tinta 900", "canonical": "#0B1220", "tonalRamp": ["#000000", "#04070C", "#080D16", "#0B1220", "#1C2333", "#45556C", "#8494AC", "#C4CEDD"] },
+      "ink-inverse-soft": { "role": "neutral", "displayName": "Tinta Inversa Suave", "canonical": "#C4D0DE", "tonalRamp": ["#45556C", "#64748B", "#94A3B8", "#C4D0DE", "#D6DEE8", "#E5EAF0", "#F1F4F7", "#FAFBFC"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Titular del hero únicamente. max-width 760px." },
+      "body": { "displayName": "Body", "purpose": "Prosa de secciones angostas (Entendimiento, Visión, Cierre)." },
+      "label": { "displayName": "Label/Mono", "purpose": "Números de sección, etiqueta 'Medios de pago' — único uso de Geist Mono." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 1px 3px rgba(2,6,24,0.10), 0 1px 2px rgba(2,6,24,0.06)", "purpose": "Reposo de elementos pequeños (badges, tags de exclusión)." },
+      { "name": "shadow-md", "value": "0 4px 6px rgba(2,6,24,0.10), 0 2px 4px rgba(2,6,24,0.10)", "purpose": "Hover de tarjetas y botones, CTA en reposo." },
+      { "name": "shadow-lg", "value": "0 10px 15px rgba(2,6,24,0.15), 0 4px 6px rgba(2,6,24,0.15)", "purpose": "Hover del CTA principal, card de inversión." }
+    ],
+    "motion": [
+      { "name": "ease-out-soft", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Easing por defecto de todas las transiciones y animaciones." },
+      { "name": "dur-fast", "value": "300ms", "purpose": "Hovers, cambios de color/borde." },
+      { "name": "dur-base", "value": "500ms", "purpose": "Transiciones de tarjeta, reveals." },
+      { "name": "dur-slow", "value": "700ms", "purpose": "Entradas del hero, línea divisoria, CTA." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "640px" },
+      { "name": "tablet", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA de WhatsApp del Cierre — único botón de toda la propuesta.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Hablemos por WhatsApp</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; padding: 16px 32px; background: #1C63D9; color: #FFFFFF; border-radius: 999px; font-family: Geist, sans-serif; font-weight: 600; text-decoration: none; transition: background 300ms cubic-bezier(0.16,1,0.3,1), transform 300ms cubic-bezier(0.16,1,0.3,1), box-shadow 300ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover, .ds-btn-primary:focus-visible { background: #020618; box-shadow: 0 10px 15px rgba(2,6,24,0.15), 0 4px 6px rgba(2,6,24,0.15); transform: translateY(-2px); }"
+    },
+    {
+      "name": "Scope Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Tarjeta de Alcance/Confianza con contenedor de ícono anclado en la esquina superior izquierda.",
+      "html": "<div class=\"ds-card\"><span class=\"ds-card__icon\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 6L9 17l-5-5\"/></svg></span><h3 class=\"ds-card__title\">Título de la tarjeta</h3><p class=\"ds-card__desc\">Descripción breve del ítem de alcance.</p></div>",
+      "css": ".ds-card { position: relative; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 22px; padding: 32px; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), box-shadow 300ms cubic-bezier(0.16,1,0.3,1), border-color 300ms cubic-bezier(0.16,1,0.3,1); } .ds-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 4px 6px rgba(2,6,24,0.10), 0 2px 4px rgba(2,6,24,0.10); border-color: #1C63D9; } .ds-card__icon { position: absolute; top: -16px; left: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #1C63D9; color: #FFFFFF; border-radius: 12px; } .ds-card__title { font-family: Geist, sans-serif; font-weight: 700; font-size: 1.125rem; color: #020618; margin: 20px 0 8px; letter-spacing: -0.02em; } .ds-card__desc { font-family: Geist, sans-serif; color: #45556C; font-size: 0.9375rem; line-height: 1.55; }"
+    },
+    {
+      "name": "Exclusion Card",
+      "kind": "card",
+      "refersTo": "card-hover",
+      "description": "Variante de tarjeta para Exclusiones: contraste semántico intencional — se hunde en vez de elevarse, borde/ícono en rojo arcilla al hover.",
+      "html": "<div class=\"ds-card ds-card--exclusion\"><span class=\"ds-card__icon\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M4.9 4.9l14.2 14.2\"/></svg></span><h3 class=\"ds-card__title\">No incluye</h3><p class=\"ds-card__desc\">Qué queda fuera del alcance.</p></div>",
+      "css": ".ds-card--exclusion { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 22px; padding: 32px; transition: transform 300ms cubic-bezier(0.16,1,0.3,1), box-shadow 300ms cubic-bezier(0.16,1,0.3,1); } .ds-card--exclusion .ds-card__icon, .ds-card--exclusion .ds-card__title { color: #94A3B8; } .ds-card--exclusion:hover { transform: translateY(4px) scale(0.99); box-shadow: 0 1px 3px rgba(2,6,24,0.10); border-color: #C15B4F; } .ds-card--exclusion:hover .ds-card__icon, .ds-card--exclusion:hover .ds-card__title { color: #C15B4F; }"
+    },
+    {
+      "name": "Fixed Nav",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Barra de navegación fija con logo, 4 anchors y barra de progreso de scroll.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav__brand\">ClaryTree</span><div class=\"ds-nav__links\"><a href=\"#\">Entendimiento</a><a href=\"#\">Alcance</a><a href=\"#\">Inversión</a><a href=\"#\">Contacto</a></div></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: rgba(255,255,255,0.92); border-bottom: 1px solid #E2E8F0; } .ds-nav__brand { font-family: Geist, sans-serif; font-weight: 700; color: #020618; } .ds-nav__links { display: flex; gap: 24px; } .ds-nav__links a { font-family: Geist, sans-serif; font-size: 0.9375rem; color: #45556C; text-decoration: none; transition: color 300ms cubic-bezier(0.16,1,0.3,1); } .ds-nav__links a:hover, .ds-nav__links a:focus-visible { color: #1C63D9; }"
+    },
+    {
+      "name": "Investment Card",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Componente insignia: precio con glow radial de marca, línea de ROI, y banda de medios de pago tratada como disclaimer al pie.",
+      "html": "<div class=\"ds-investment-card\"><p class=\"ds-investment-card__price\">$1.000.000 COP</p><p class=\"ds-investment-card__terms\">50% para iniciar, 50% contra entrega</p><p class=\"ds-investment-card__roi\">Con la recuperación de ~140 citas/mes, el retorno estimado supera los <strong>$14M mensuales</strong>.</p><div class=\"ds-investment-card__payments\"><span class=\"ds-investment-card__payments-label\">Medios de pago</span></div></div>",
+      "css": ".ds-investment-card { position: relative; max-width: 480px; margin: 0 auto; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 22px; padding: 56px 40px 12px; box-shadow: 0 10px 15px rgba(2,6,24,0.15), 0 4px 6px rgba(2,6,24,0.15); } .ds-investment-card::before { content: ''; position: absolute; left: 50%; top: 0; width: 64px; height: 3px; margin-left: -32px; border-radius: 999px; background: #1C63D9; } .ds-investment-card__price { font-family: Geist, sans-serif; font-weight: 700; font-size: 2.5rem; color: #020618; } .ds-investment-card__terms { font-size: 0.9375rem; color: #45556C; } .ds-investment-card__roi { max-width: 520px; margin: 24px auto 0; padding-top: 22px; border-top: 1px solid #E2E8F0; font-size: 0.9375rem; line-height: 1.55; color: #45556C; } .ds-investment-card__roi strong { color: #020618; font-weight: 600; } .ds-investment-card__payments { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 14px; margin-top: 34px; padding-top: 10px; border-top: 1px solid #E2E8F0; } .ds-investment-card__payments-label { font-family: 'Geist Mono', monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: #45556C; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Expediente Clínico Premium",
+    "overview": "El sistema replica clarytree.com para que cada propuesta se sienta como una extensión directa de la marca, nunca como un documento aparte. La paleta y la tipografía comunican sobriedad de historia clínica — blanco, azul de marca, grises tintados de tinta — pero el acabado (radios muy redondeados, sombras suaves tintadas, ritmo editorial de anchos alternados) traiciona un pulido de producto tech, no de formulario médico. Es un sistema que gana confianza mostrando cifras (~617 citas/mes, $14M de retorno) antes que adjetivos, y que reserva el color a un único acento dominante: el resto son variaciones tonales de tinta. Explícitamente rechaza el look de PDF/deck corporativo genérico y los clichés de landing SaaS (hero-metric, tarjetas idénticas, eyebrows repetidos sección tras sección).",
+    "keyCharacteristics": [
+      "Un solo acento cromático dominante (#1C63D9); el cyan es un privilegio raro, no un segundo color",
+      "Radios muy redondeados (22px en tarjetas, pill en botones) — firme pero suave, nunca cuadrado",
+      "Sombras y overlays tintados de tinta (rgba(2,6,24,...)), nunca negro puro",
+      "Ritmo editorial: ancho angosto (860px) para prosa, ancho amplio (1200px) para secciones showcase",
+      "Padding vertical escalado por densidad de contenido, no uniforme"
+    ],
+    "rules": [
+      { "name": "La Regla del Acento Único", "body": "El azul de marca (--color-accent) es el único color que puede dominar una superficie. El cyan nunca compite con él — aparece en un máximo de dos eyebrows por propuesta, nunca en botones, bordes o iconografía funcional.", "section": "colors" },
+      { "name": "La Regla de la Tinta, no del Negro", "body": "Ninguna sombra, overlay o texto 'gris' usa negro puro o gris neutro. Todo tinte deriva de rgba(2, 6, 24, X) o de --color-ink-soft.", "section": "colors" },
+      { "name": "La Regla del Tracking Negativo", "body": "Todo título usa letter-spacing ligeramente negativo (nunca por debajo de -0.04em) — nunca tracking positivo salvo en labels mono uppercase.", "section": "typography" },
+      { "name": "La Regla del Reposo Plano", "body": "Ninguna tarjeta lleva sombra en reposo salvo shadow-sm en elementos ya pequeños; la sombra crece únicamente como reacción al hover.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do usar --color-accent (#1C63D9) como único acento dominante — logo, CTA, hovers activos.",
+      "Do mantener radios muy redondeados (22px tarjetas, pill botones) — firme pero suave.",
+      "Do tintar toda sombra/overlay con rgba(2,6,24,X), nunca negro puro ni gris neutro.",
+      "Do anteponer cifras concretas (617 citas/mes, $14M retorno, <5% cancelación) a cualquier promesa genérica de valor.",
+      "Do reservar el cyan (#06B6D4) a máximo dos eyebrows por propuesta."
+    ],
+    "donts": [
+      "Don't diseñar como un PDF o deck corporativo genérico — sin personalidad, plantilla de agencia sin identidad propia.",
+      "Don't caer en clichés de landing SaaS: hero-metric template, tarjetas idénticas repetidas sin variación, eyebrow uppercase encima de cada sección.",
+      "Don't usar un segundo color dominante junto al azul de marca — el cyan es privilegio raro, no alternativa.",
+      "Don't subir la sección de Inversión al mismo nivel visual/energético que el Cierre — el Cierre es el único clímax de la página.",
+      "Don't usar border-left/border-right como acento decorativo, ni gradiente en texto, ni glassmorphism decorativo."
+    ]
+  }
+}

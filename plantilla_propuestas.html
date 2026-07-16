@@ -84,6 +84,14 @@
                                es variable, no usa [NOMBRE_PROYECTO]
     Título por defecto: "Propuesta comercial - Implementación agentes IA
     para [NOMBRE_CLIENTE]" (fijo, no usa [TIPO_DE_SERVICIO])
+    VIDEO_HERO                 Fijo: video de fondo del hero servido en
+                               /assets/hero-v6-loop.mp4 (loop boomerang sin
+                               corte; autoplay, loop, muted, playsinline;
+                               velocidad 0.5x por JS), con poster
+                               /assets/hero-v6.jpg y un degradado hacia
+                               --color-bg por encima para que el texto siga
+                               legible. No es una variable por reemplazar;
+                               igual en todas las duplicatas.
 
   02. ENTENDIMIENTO
     [PARRAFO_ENTENDIMIENTO]    Bloque único: resumen cálido del proyecto
@@ -94,12 +102,19 @@
 
   04. ALCANCE
     [LISTA_ALCANCE]            Bloque único: la IA inyecta 4–8 tarjetas
-                                (ver plantilla de ítem en el comentario HTML)
+                                (ver plantilla de ítem en el comentario HTML).
+                                Cada tarjeta lleva un contenedor de ícono
+                                (.card__icon) anclado a la esquina superior
+                                izquierda, con un ícono elegido en rotación
+                                del sprite fijo <svg id="icon-sprite"> (ver
+                                justo después de <body>).
 
   05. EXCLUSIONES
     [LISTA_EXCLUSIONES]        Bloque único: la IA inyecta los ítems <li>,
                                 mismo estilo de tarjeta (.card) y título en
-                                negrilla (.scope-card__title) que Alcance
+                                negrilla (.scope-card__title) que Alcance,
+                                con el mismo contenedor de ícono (.card__icon)
+                                pero siempre con el ícono #icon-ban.
 
   06. FASES Y TIEMPOS
     [FASES]                    Bloque único: la IA inyecta los bloques de fase,
@@ -117,7 +132,9 @@
     Sección ESTÁTICA — no usa variables. Módulo fijo "Resultados
     comprobados" (caso de uso real) con 5 tarjetas de cifras, mismo
     estilo y colores (.card/.scope-card__title/.scope-card__desc) que
-    Alcance. Igual en toda propuesta; no se toca al duplicar la plantilla.
+    Alcance, cada una con su propio ícono fijo (.card__icon) elegido a
+    mano por métrica. Igual en toda propuesta; no se toca al duplicar
+    la plantilla.
 
   09. CIERRE
     [PARRAFO_CIERRE]           Bloque único: mensaje breve de cierre
@@ -162,6 +179,14 @@
        --color-cyan sigue usándose tal cual para el isotipo (no es texto). */
     --color-cyan-text: #0E7490;
 
+    /* Paleta oscura: solo para Inversión (.section--ink) y Cierre
+       (.section--premium), los dos únicos momentos de fondo oscuro de la
+       plantilla. Antes eran literales repetidos (#0B1220 x2, #C4D0DE x2) —
+       tokenizados tras el audit para que un futuro ajuste de la paleta
+       oscura no dependa de encontrar cada copia a mano. */
+    --color-ink-900: #0B1220;
+    --color-ink-inverse-soft: #C4D0DE;
+
     --shadow-sm: 0 1px 3px rgba(2, 6, 24, 0.10), 0 1px 2px rgba(2, 6, 24, 0.06);
     --shadow-md: 0 4px 6px rgba(2, 6, 24, 0.10), 0 2px 4px rgba(2, 6, 24, 0.10);
     --shadow-lg: 0 10px 15px rgba(2, 6, 24, 0.15), 0 4px 6px rgba(2, 6, 24, 0.15);
@@ -170,6 +195,11 @@
     --radius-md: 16px;
     --radius-lg: 22px;
     --radius-pill: 999px;
+
+    /* Layout: ancho de lectura (angosto, .container = 860px) para las
+       secciones de prosa vs. ancho amplio para secciones "showcase"
+       (hero a esquinas, confianza proof bar). Ver .container--wide. */
+    --container-wide: 1200px;
 
     /* Movimiento ------------------------------------------------- */
     --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
@@ -200,6 +230,9 @@
     margin: 0 auto;
     padding: 0 24px;
   }
+  /* Ancho amplio para secciones "showcase" (hero a esquinas, confianza proof
+     bar). El resto de las secciones usan el ancho de lectura angosto. */
+  .container--wide{ max-width: var(--container-wide); }
 
   .section{ padding: 120px 0; scroll-margin-top: 74px; }
   .section--alt{ background: var(--color-bg-alt); }
@@ -222,12 +255,14 @@
     line-height: 1.25;
     letter-spacing: -0.02em;
     margin-bottom: 24px;
+    text-wrap: balance;
   }
 
   .section-text{
     font-size: 1.125rem;
     color: var(--color-ink-soft);
     max-width: 640px;
+    text-wrap: pretty;
   }
 
   /* ===================== ACCESIBILIDAD DE FOCO ===================== */
@@ -367,6 +402,37 @@
     pointer-events: none;
   }
   .hero__content{ position: relative; z-index: 1; }
+  /* Video de fondo del hero, anclado a la derecha. El degradado (::after) se
+     "genera desde la derecha": arranca transparente ahí (se ve el video) y
+     crece hacia --color-bg opaco a la izquierda, donde vive el texto, para
+     que nunca compitan. rgba literal a propósito, igual que en .site-nav: es
+     --color-bg (#FFFFFF) con alpha, que rgba() no puede leer desde un
+     custom property por canal. */
+  .hero__image{
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .hero__video{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    opacity: 0.9;
+  }
+  .hero__image::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+      var(--color-bg) 0%,
+      rgba(255, 255, 255, 0.92) 30%,
+      rgba(255, 255, 255, 0.5) 55%,
+      transparent 85%);
+  }
   .hero__meta{
     display: flex;
     justify-content: space-between;
@@ -382,6 +448,10 @@
     display: inline-flex;
     align-items: baseline;
     gap: 10px;
+    /* Anclada a la esquina derecha del hero (container--wide), cae sobre la
+       zona donde el video se ve a plena opacidad: un halo claro la mantiene
+       legible sin necesidad de una caja de fondo. */
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85);
   }
   .hero__date-sep{ color: var(--color-accent-soft); }
 
@@ -393,11 +463,13 @@
     color: var(--color-ink);
   }
   /* El isotipo se pinta con mask-image (no <img>) para poder recolorearlo
-     a cyan sin depender del color propio del PNG fuente. */
+     por CSS sin depender del color propio del PNG fuente. En --color-accent
+     (mismo azul que "Tree" del wordmark) para unificar el lockup en un solo
+     color de marca — antes era cyan, ver CLAUDE.md. */
   .brand__logo{
     display: block;
     flex-shrink: 0;
-    background-color: var(--color-cyan);
+    background-color: var(--color-accent);
     -webkit-mask-image: url('/assets/clarytree_icon_navy.png');
     mask-image: url('/assets/clarytree_icon_navy.png');
     -webkit-mask-size: contain;
@@ -486,6 +558,11 @@
     font-size: clamp(2rem, 6vw, 3.625rem);
     line-height: 1.18;
     letter-spacing: -0.03em;
+    /* El hero se abre a container--wide para llevar meta/fecha a las esquinas,
+       pero el titular se mantiene acotado a la izquierda (columna legible sobre
+       la zona clara del degradado), sin correr hasta el video. */
+    max-width: 760px;
+    text-wrap: balance;
   }
   /* Oculto solo mientras JS reconstruye el título en palabras (evita el
      parpadeo de texto plano visible -> invisible -> animado). Sin JS,
@@ -506,10 +583,14 @@
     color: var(--color-ink-soft);
     opacity: 0;
     animation: fadeSlideUp var(--dur-slow) var(--ease-out-soft) 0.9s forwards;
+    max-width: 640px;
   }
 
+  /* Línea de acento entre el subtítulo y el CTA: separador visual con un
+     poco de peso de marca. 108px (~12.5% más larga que la original de
+     96px). */
   .hero__divider{
-    width: 96px;
+    width: 108px;
     height: 3px;
     background: var(--color-accent);
     margin: 40px 0;
@@ -592,7 +673,33 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
   }
+  /* Alcance admite 4–8 tarjetas, pero exponer más de 4 de una sentada excede
+     el límite de carga cognitiva (≤4 ítems por grupo) que el resto de la
+     página respeta (nav, CTA). initScopeToggle() oculta la 5ª tarjeta en
+     adelante detrás de un disclosure — funciona sobre cualquier cantidad de
+     tarjetas, generadas por build-proposal.js o pegadas a mano por la IA. */
+  .scope-card--collapsed{ display: none; }
+  .scope-grid__toggle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin: 24px auto 0;
+    padding: 8px 22px;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out-soft),
+                border-color var(--dur-fast) var(--ease-out-soft);
+  }
+  .scope-grid__toggle:hover,
+  .scope-grid__toggle:focus-visible{ color: var(--color-accent); border-color: var(--color-accent); }
   .card{
+    position: relative;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -605,6 +712,33 @@
     transform: translateY(-6px);
     box-shadow: var(--shadow-md);
     border-color: var(--color-accent);
+  }
+  /* Ícono anclado a la esquina superior izquierda de la tarjeta, sobresale
+     un poco del borde de arriba (como una insignia). .card--icon agrega el
+     espacio extra arriba para que el título nunca quede debajo del ícono. */
+  .card--icon{ padding-top: 46px; }
+  .card__icon{
+    position: absolute;
+    top: -14px;
+    left: 22px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-accent);
+  }
+  .card__icon svg{
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
   .scope-card__title{
     font-family: var(--font-heading);
@@ -699,7 +833,10 @@
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: 56px 40px;
+    /* Padding inferior reducido a propósito: la banda de medios de pago vive
+       pegada al borde de abajo, imitando el pie de página (compacta, cerca
+       del límite), en vez del mismo aire generoso que arriba (precio/ROI). */
+    padding: 56px 40px 12px;
     box-shadow: var(--shadow-lg);
     transition: opacity var(--dur-slow) var(--ease-out-soft),
                 transform var(--dur-slow) var(--ease-out-soft);
@@ -724,6 +861,83 @@
     font-size: 0.9375rem;
     color: var(--color-ink-soft);
   }
+  /* Inversión "premium calmada": glow azul de marca contenido detrás de la
+     card + filo de acento arriba + una línea de ROI que ancla el precio al
+     valor probado (sección 08), para que el número se sienta pequeño frente al
+     retorno. Deliberadamente NO sube al nivel del cierre — ese es el clímax. */
+  .section--investment{ position: relative; overflow: hidden; }
+  .section--investment .container{ position: relative; z-index: 1; }
+  .section--investment::before{
+    content: "";
+    position: absolute;
+    left: 50%; top: 60%;
+    width: min(720px, 92%);
+    height: 560px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(28, 99, 217, 0.28), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .investment-card{ position: relative; }
+  .investment-card::before{
+    content: "";
+    position: absolute; left: 50%; top: 0;
+    width: 64px; height: 3px; margin-left: -32px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+  }
+  .investment-card__roi{
+    max-width: 520px;
+    margin: 24px auto 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-ink-soft);
+  }
+  .investment-card__roi strong{ color: var(--color-ink); font-weight: 600; }
+  /* Banda de medios de pago al fondo de la card: logos monocromáticos en UN
+     SOLO tono gris (currentColor), pequeños. Franquicias (Visa, Mastercard,
+     Diners) + Bre-B (transferencias instantáneas del Banco de la República).
+     Copy/logos fijos de marca — no variable por propuesta. */
+  /* Banda de pagos como "disclaimer" al pie de la card, no como la siguiente
+     subsección del ROI: el margin-top grande la aleja del texto de arriba,
+     pero el border-top va pegado a su propio contenido (padding-top chico),
+     así la línea separa visualmente al disclaimer del ROI en vez de leerse
+     como el cierre del bloque del ROI. Card con padding-bottom mínimo para
+     que la fila quede al ras del borde inferior. */
+  .investment-card__payments{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    margin-top: 34px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+  }
+  .investment-card__payments-label{
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    /* Antes #94A3B8 (mismo tono que los logos): como texto real necesita
+       4.5:1 de contraste, no los 3:1 de un objeto gráfico — medía 2.56:1 y
+       fallaba WCAG AA. --color-ink-soft da ~7.6:1 sobre blanco. Los logos
+       de abajo (.pay-logos) sí se quedan en #94A3B8: son gráficos, no texto. */
+    color: var(--color-ink-soft);
+    white-space: nowrap;
+  }
+  .pay-logos{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 11px;
+    flex-wrap: wrap;
+    color: #94A3B8;                 /* tono único para TODOS los logos */
+  }
+  .pay-logo{ display: inline-flex; align-items: center; }
+  .pay-logo svg{ height: 11px; width: auto; display: block; fill: currentColor; }
 
   /* ========================== 08. CONFIANZA ========================== */
   .results{ margin-top: 48px; }
@@ -744,14 +958,66 @@
   }
   .results__subtitle{
     font-size: 0.875rem;
+    font-style: italic;
     color: var(--color-ink-soft);
   }
-  /* Tarjetas: mismo estilo y colores que 04. ALCANCE — reutiliza .card,
-     .scope-card__title y .scope-card__desc, sin clases propias. */
+  /* Proof bar: las 5 KPIs como una sola franja continua (no tarjetas
+     individuales) dividida por líneas finas, con ícono en línea (no en
+     placa flotante) y la primera cifra destacada en azul de marca. Antes
+     eran 5 tarjetas idénticas con icono flotante — leía como el
+     "hero-metric template" reubicado (mismo patrón que DESIGN.md prohíbe
+     en el hero, solo movido de lugar); la revisión de diseño y el detector
+     de patrones coincidieron en esto de forma independiente. La sección se
+     abre a container--wide (ver HTML). Aguantan en fila hasta 900px; por
+     debajo degradan 5 -> 3 -> 2 -> 1. */
   .results-grid{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .results-grid .card{
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 32px 24px;
+  }
+  .results-grid .card:not(:first-child){ border-left: 1px solid var(--color-border); }
+  .results-grid .card:hover{ background: var(--color-bg-alt); }
+  .results-grid .card--icon{ padding-top: 32px; }
+  .results-grid .card__icon{
+    position: static;
+    width: 26px;
+    height: 26px;
+    margin-bottom: 12px;
+    background: transparent;
+    border: none;
+    color: var(--color-accent);
+  }
+  .results-grid .card__icon svg{ width: 22px; height: 22px; }
+  /* Primera cifra (~617 citas/mes, la más alta) destacada: rompe la
+     simetría de "5 iguales" sin dejar de ser la misma franja. */
+  .results-grid .card:first-child .scope-card__title{
+    color: var(--color-accent);
+    font-size: 1.625rem;
+  }
+  @media (max-width: 900px){
+    .results-grid{ grid-template-columns: repeat(3, 1fr); }
+    .results-grid .card{ border-left: none; border-top: 1px solid var(--color-border); }
+    .results-grid .card:nth-child(-n+3){ border-top: none; }
+  }
+  @media (max-width: 620px){
+    .results-grid{ grid-template-columns: repeat(2, 1fr); }
+    .results-grid .card:nth-child(-n+3){ border-top: 1px solid var(--color-border); }
+    .results-grid .card:nth-child(-n+2){ border-top: none; }
+  }
+  @media (max-width: 440px){
+    .results-grid{ grid-template-columns: 1fr; }
+    .results-grid .card:nth-child(-n+3){ border-top: 1px solid var(--color-border); }
+    .results-grid .card:first-child{ border-top: none; }
   }
 
   /* ============================ 09. CIERRE ============================ */
@@ -771,11 +1037,6 @@
   .closing-footer__company{
     font-family: var(--font-heading);
     font-size: 1.0625rem;
-    margin-bottom: 6px;
-  }
-  .closing-footer__contact{
-    font-size: 0.875rem;
-    color: var(--color-ink-soft);
   }
 
   /* ===================== PREFERENCIA DE MOVIMIENTO REDUCIDO ===================== */
@@ -790,6 +1051,13 @@
   }
 
   @media (max-width: 640px){
+    .hero__image::after{
+      background: linear-gradient(to right,
+        var(--color-bg) 0%,
+        rgba(255, 255, 255, 0.92) 55%,
+        rgba(255, 255, 255, 0.6) 80%,
+        rgba(255, 255, 255, 0.4) 100%);
+    }
     .section{ padding: 88px 0; }
     .hero{ min-height: 100vh; }
     .phase{ gap: 16px; }
@@ -797,15 +1065,181 @@
     .brand--hero .brand__logo{ width: 38px; height: 44px; margin-right: 10px; }
     .brand--hero .brand__wordmark{ font-size: 1.25rem; }
   }
+
+  /* ==============================================================
+     FONDOS ALTERNADOS FULL-WIDTH + AIRE (rediseño estilo Apple)
+     Cada sección cambia de fondo para que se perciba un "cambio de
+     tema" en vez de un blanco monótono. Paleta sobria de salud
+     (azul de marca lavado, gris, navy). Ver CLAUDE.md.
+     ============================================================== */
+  .section--blue{ background: #EEF4FC; }              /* azul de marca muy lavado */
+
+  /* "Qué no incluye": fondo gris apagado + tarjetas de-enfatizadas
+     (ícono y título en gris, no en azul) para que se lea "fuera de
+     alcance". Al hover el contorno y el ícono pasan a rojo arcilla
+     (no azul, que leería como "incluido"), la tarjeta se HUNDE en vez
+     de elevarse, y el título encoge un poco (se aleja). */
+  .section--muted{ background: #ECEDEF; }
+  .section--muted .card__icon{ color: #64748B; background: #F3F4F6; }
+  .section--muted .scope-card__title{ color: var(--color-ink-soft); }
+  .section--muted .card:hover{
+    border-color: #C15B4F;
+    transform: translateY(4px) scale(0.99);
+    box-shadow: var(--shadow-sm);
+  }
+  .section--muted .card:hover .card__icon{ color: #C15B4F; background: #FBEEEC; }
+  .exclusions-list .scope-card__title{
+    transition: transform var(--dur-fast) var(--ease-out-soft);
+    transform-origin: left center;
+  }
+  .exclusions-list > .card:hover .scope-card__title{ transform: scale(0.95); }
+
+  /* Inversión: momento oscuro plano (texto claro sobre navy). */
+  .section--ink{ background: var(--color-ink-900); }
+  .section--ink .section-number{ color: var(--color-accent-soft); }
+  .section--ink .section-title{ color: #FFFFFF; }
+  .section--ink .section-text{ color: var(--color-ink-inverse-soft); }
+
+  /* Cierre premium: oscuro con degradado + resplandor azul de marca
+     detrás del CTA, eyebrow cyan (amarra con el isotipo) y más peso
+     vertical (clímax del recorrido). */
+  .section--premium{
+    background:
+      radial-gradient(120% 85% at 50% 8%, rgba(28, 99, 217, 0.28), transparent 60%),
+      linear-gradient(180deg, var(--color-ink-900) 0%, #0E1A33 100%);
+  }
+  .section--premium .section-number{ color: #22D3EE; }
+  .section--premium .section-title{ color: #FFFFFF; }
+  .section--premium .section-text{ color: var(--color-ink-inverse-soft); }
+  .section--premium .closing-footer__company{ color: #FFFFFF; }
+
+  /* Hover de tarjetas positivas (Alcance): se elevan hacia el cursor
+     (translate up + zoom). Se apunta a nivel de grid para ganarle en
+     especificidad a la regla del reveal escalonado
+     (.js .stagger-list.is-visible > *), que si no fija transform:
+     translateY(0) y anula el lift. Confianza (results-grid) ya no usa
+     tarjetas individuales — ver su propio hover (fondo, no lift) junto a
+     su definición en 08. CONFIANZA. */
+  .scope-grid > .card:hover{ transform: translateY(-6px) scale(1.02); }
+
+  /* Nodo que recorre la cadena de "Cómo trabajamos" — la ruta la calcula
+     initTimelineNode() por JS según la posición real de cada círculo. */
+  .timeline__node{
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 5px 1px rgba(28, 99, 217, 0.35);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Airy: más respiración vertical en desktop (sin tocar mobile). Padding
+     escalado según densidad de contenido (no uniforme): las secciones de un
+     solo párrafo o grids cortos usan menos, para que el padding vacío no
+     domine sobre el contenido; las secciones ya densas (grids largos, card de
+     inversión, timeline) mantienen el valor "airy" base. Selectores por #id
+     (cada sección tiene uno único) para ganar en especificidad sin depender
+     del orden de cascada. */
+  @media (min-width: 641px){
+    .section{ padding: 156px 0; }
+    #entendimiento, #vision{ padding: 108px 0; }   /* un solo párrafo */
+    #exclusiones, #confianza{ padding: 128px 0; }  /* grid/proof-bar cortos */
+    /* #alcance, #fases, #inversion se quedan en el base 156px: ya están
+       llenos de contenido (grid largo, timeline, card con ROI + pagos). */
+    #cierre{ padding: 140px 0; }                   /* clímax visual, pesa más
+       que el resto pero sin ser tan extremo como el vacío que dejaba antes */
+  }
+
+  /* ============================ PIE DE PÁGINA ============================
+     Barra de marca (© + accesos directos a WhatsApp/correo/web + región).
+     Oscura y cohesiva con el cierre premium (el clímax). Grid de 3 columnas
+     (1fr auto 1fr) para centrar los accesos sin importar el ancho de los
+     lados. Fija en toda propuesta — no usa placeholders de plantilla. Ver
+     CLAUDE.md. */
+  .site-footer{
+    background: var(--color-ink-900);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    /* Banda ~30% más baja que el padding "airy" del resto de la página:
+       esto es un pie de contacto, no una sección de contenido. */
+    padding: 18px 0;
+  }
+  .site-footer__inner{
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+  }
+  .site-footer__copy{ font-size: 0.8125rem; color: #94A3B8; }
+  .site-footer__social{
+    display: inline-flex;
+    gap: 8px;
+    justify-self: center;
+  }
+  .site-footer__link{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: var(--radius-pill);
+    color: var(--color-ink-inverse-soft);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: color var(--dur-fast) var(--ease-out-soft),
+                border-color var(--dur-fast) var(--ease-out-soft),
+                background var(--dur-fast) var(--ease-out-soft),
+                transform var(--dur-fast) var(--ease-out-soft);
+  }
+  .site-footer__link svg{ width: 15px; height: 15px; fill: currentColor; }
+  .site-footer__region{ font-size: 0.8125rem; color: #94A3B8; justify-self: end; }
+  @media (hover: hover) and (pointer: fine){
+    .site-footer__link:hover{
+      color: #FFFFFF;
+      border-color: var(--color-accent);
+      background: rgba(28, 99, 217, 0.18);
+      transform: translateY(-2px);
+    }
+  }
+  .site-footer__link:focus-visible{ color: #FFFFFF; border-color: var(--color-accent); }
+  @media (max-width: 640px){
+    .site-footer__inner{
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      gap: 18px;
+    }
+    .site-footer__copy, .site-footer__region{ justify-self: center; }
+  }
 </style>
 </head>
 <body data-client-name="[NOMBRE_CLIENTE]">
 
   <!-- ============================================================
+       SPRITE DE ÍCONOS — símbolos reutilizados por .card__icon en
+       Alcance, Exclusiones y Confianza (ver CSS .card__icon). No se
+       renderiza directo; cada tarjeta lo referencia con <use>.
+       ============================================================ -->
+  <svg id="icon-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
+    <defs>
+      <symbol id="icon-check" viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></symbol>
+      <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 3z"/></symbol>
+      <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/></symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3 19h18M6 19v-7M12 19V6M18 19v-4"/></symbol>
+      <symbol id="icon-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6.3 6.3l11.4 11.4"/></symbol>
+      <symbol id="icon-calendar-check" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4M9 14l2 2 4-4"/></symbol>
+      <symbol id="icon-trend-down" viewBox="0 0 24 24"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
+      <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.6"/><path d="M4 13a8 8 0 0 0 13.7 4.7L20 15.4"/><path d="M4 4.6v4h4M20 19.4v-4h-4"/></symbol>
+      <symbol id="icon-trend-up" viewBox="0 0 24 24"><path d="M4 16l6-6 4 4 6-7"/><path d="M20 10V6h-4"/></symbol>
+      <symbol id="icon-shield-check" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- ============================================================
        BARRA DE NAVEGACIÓN FIJA — aparece al hacer scroll, con
        progreso de lectura (ver CLAUDE.md: feature obligatorio).
        ============================================================ -->
-  <nav class="site-nav" id="site-nav" aria-label="Navegación de la propuesta">
+  <nav class="site-nav" id="site-nav" aria-label="Navegación de la propuesta" inert>
     <div class="container site-nav__inner">
       <a href="#portada" class="brand brand--nav" aria-label="ClaryTree Clinics">
         <span class="brand__logo" aria-hidden="true"></span>
@@ -815,7 +1249,7 @@
         <li><a href="#entendimiento">Entendimiento</a></li>
         <li><a href="#alcance">Alcance</a></li>
         <li><a href="#inversion">Inversión</a></li>
-        <li><a href="#cierre">Contacto</a></li>
+        <li><a href="#cierre">Cierre</a></li>
       </ul>
     </div>
     <div class="site-nav__progress" aria-hidden="true">
@@ -829,7 +1263,17 @@
        ============================================================ -->
   <section class="hero" id="portada">
     <div class="hero__bg" data-parallax="0.15" aria-hidden="true"></div>
-    <div class="container hero__content">
+    <!-- Video de fondo del hero (activo de marca fijo, ver CLAUDE.md).
+         autoplay+loop+muted+playsinline para que el navegador lo reproduzca
+         solo; la velocidad 0.5x se aplica por JS (initHeroVideo). El poster
+         es el primer frame estático, visible en conexiones lentas y cuando
+         el usuario pide prefers-reduced-motion. -->
+    <div class="hero__image" aria-hidden="true">
+      <video class="hero__video" autoplay loop muted playsinline poster="/assets/hero-v6.jpg">
+        <source src="/assets/hero-v6-loop.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="container container--wide hero__content">
       <div class="hero__meta">
         <a href="#portada" class="brand brand--hero" aria-label="ClaryTree Clinics">
           <span class="brand__logo" aria-hidden="true"></span>
@@ -858,7 +1302,7 @@
   <!-- ============================================================
        03. NUESTRA VISIÓN — scroll reveal + parallax sutil
        ============================================================ -->
-  <section class="section section--alt vision" id="vision">
+  <section class="section vision section--blue" id="vision">
     <!-- OPCIONAL: si no hay [IMAGEN_VISION], eliminar la capa siguiente -->
     <div class="vision__layer" data-parallax="0.2" style="background-image:url('[IMAGEN_VISION]');" aria-hidden="true"></div>
     <div class="container">
@@ -878,26 +1322,32 @@
       <div class="scope-grid stagger-list" id="scope-grid">
         <!--
           La IA debe reemplazar [LISTA_ALCANCE] por 4–8 tarjetas con esta estructura:
-          <article class="card scope-card">
+          <article class="card card--icon scope-card">
+            <span class="card__icon"><svg><use href="#icon-check"></use></svg></span>
             <h3 class="scope-card__title">[TITULO_ITEM]</h3>
             <p class="scope-card__desc">[DESCRIPCION_ITEM]</p>
           </article>
+          El ícono rota entre #icon-check, #icon-chat, #icon-calendar e
+          #icon-chart según la posición del ítem (ver iconos definidos en
+          el sprite <svg id="icon-sprite"> justo después de <body>).
         -->
         [LISTA_ALCANCE]
       </div>
+      <button type="button" class="scope-grid__toggle" id="scope-grid-toggle" hidden>Ver todo el alcance</button>
     </div>
   </section>
 
   <!-- ============================================================
        05. QUÉ NO INCLUYE — Exclusiones (mismo estilo de tarjeta que Alcance)
        ============================================================ -->
-  <section class="section section--alt" id="exclusiones">
+  <section class="section section--muted" id="exclusiones">
     <div class="container">
       <span class="section-number reveal">05</span>
       <h2 class="section-title reveal reveal--d1">Qué no incluye</h2>
       <ul class="exclusions-list stagger-list" id="exclusions-list">
         <!-- La IA debe reemplazar [LISTA_EXCLUSIONES] por ítems:
-          <li class="card">
+          <li class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-ban"></use></svg></span>
             <h3 class="scope-card__title">[TEXTO_EXCLUSION]</h3>
           </li>
         -->
@@ -937,7 +1387,7 @@
   <!-- ============================================================
        07. INVERSIÓN — momento clave (fade + scale)
        ============================================================ -->
-  <section class="section section--alt section--investment" id="inversion">
+  <section class="section section--investment section--ink" id="inversion">
     <div class="container">
       <span class="section-number reveal">07</span>
       <h2 class="section-title reveal reveal--d1">La inversión</h2>
@@ -945,6 +1395,33 @@
         <p class="investment-card__price">[PRECIO]</p>
         <!-- OPCIONAL: si no hay [FORMA_DE_PAGO], eliminar este párrafo -->
         <p class="investment-card__terms">[FORMA_DE_PAGO]</p>
+        <!-- Línea de ROI: copy FIJO de marca (ancla el precio al caso probado
+             de la sección 08). No es variable por propuesta. -->
+        <p class="investment-card__roi">Con la recuperación de ~140 citas/mes, el retorno estimado supera los <strong>$14M mensuales</strong>: la inversión se paga en las primeras semanas de operación.</p>
+        <!-- Banda de medios de pago: logos monocromáticos (un solo tono gris),
+             fijos de marca. Franquicias (Visa, Mastercard, Diners) + Bre-B
+             (transferencias instantáneas del Banco de la República). -->
+        <div class="investment-card__payments">
+          <span class="investment-card__payments-label">Medios de pago</span>
+          <div class="pay-logos" role="list">
+            <!-- Logos oficiales recoloreados a un tono gris único (currentColor).
+                 Visa/Mastercard: SVG oficiales (Wikimedia Commons). Diners:
+                 símbolo del disco partido. Bre-B: logo de marca (gradiente
+                 original retirado). Uso nominativo (medios de pago). -->
+            <span class="pay-logo" role="listitem" aria-label="Visa">
+              <svg viewBox="0 0 1000 324.68" aria-hidden="true"><path fill="currentColor" d="m651.19.5c-70.93,0-134.32,36.77-134.32,104.69,0,77.9,112.42,83.28,112.42,122.42,0,16.48-18.88,31.23-51.14,31.23-45.77,0-79.98-20.61-79.98-20.61l-14.64,68.55s39.41,17.41,91.73,17.41c77.55,0,138.58-38.57,138.58-107.66,0-82.32-112.89-87.54-112.89-123.86,0-12.91,15.5-27.05,47.66-27.05,36.29,0,65.89,14.99,65.89,14.99l14.33-66.2S696.61.5,651.18.5h0ZM2.22,5.5L.5,15.49s29.84,5.46,56.72,16.36c34.61,12.49,37.07,19.77,42.9,42.35l63.51,244.83h85.14L379.93,5.5h-84.94l-84.28,213.17-34.39-180.7c-3.15-20.68-19.13-32.48-38.68-32.48,0,0-135.41,0-135.41,0Zm411.87,0l-66.63,313.53h81L494.85,5.5h-80.76Zm451.76,0c-19.53,0-29.88,10.46-37.47,28.73l-118.67,284.8h84.94l16.43-47.47h103.48l9.99,47.47h74.95L934.12,5.5h-68.27Zm11.05,84.71l25.18,117.65h-67.45l42.28-117.65h0Z"/></svg>
+            </span>
+            <span class="pay-logo" role="listitem" aria-label="Mastercard">
+              <svg viewBox="0 0 1000 618" aria-hidden="true"><path fill="currentColor" d="m308,0a309,309 0 1,0 2,0z"/><path fill="currentColor" d="m690,0a309,309 0 1,0 2,0z"/><path fill="#FFFFFF" d="m500,66a309,309 0 0,0 0,486 309,309 0 0,0 0-486"/></svg>
+            </span>
+            <span class="pay-logo" role="listitem" aria-label="Diners Club">
+              <svg viewBox="60 76 360 360" aria-hidden="true"><path fill="currentColor" d="M239.7 79.9c-96.9 0-175.8 78.6-175.8 175.8 0 96.9 78.9 175.8 175.8 175.8 97.2 0 175.8-78.9 175.8-175.8 0-97.2-78.6-175.8-175.8-175.8zm-39.9 279.6c-41.7-15.9-71.4-56.4-71.4-103.8s29.7-87.9 71.4-104.1v207.9zm79.8.3V151.6c41.7 16.2 71.4 56.7 71.4 104.1s-29.7 87.9-71.4 104.1z"/></svg>
+            </span>
+            <span class="pay-logo" role="listitem" aria-label="Bre-B">
+              <svg viewBox="25.06 195.72 496.54 157.64" aria-hidden="true"><path fill="currentColor" d="M470.26 198.47c40.03 4.75 50.61 45.33 20.66 70.37 30.68 6.87 30.1 52.85 4.09 66.08-2.89 1.47-14.61 5.86-17.1 5.86H395c-2.71 0-4.78-2.44-4.33-5.12 3.85-22.9 13.8-44.85 18.91-67.6l-19.82-62.7c-.44-1.39-.22-2.91.6-4.12l.31-.46a4.833 4.833 0 0 1 4.32-2.1c24.07 1.56 52.09-2.96 75.27-.21zm-9.18 26.02c-10.52-1.28-25.58 0-36.72 0-.92 0-2.15 2.2-2.07 3.51.09 1.45 8.07 26.37 8.83 27.6 3.28 5.28 38.89 4.46 44.3-6.06 6.83-13.27-.96-23.43-14.34-25.05zm-36.73 90.28c7.86 1.99 35.56 0 45.91 0 3.77 0 12.55-6.46 13.85-10.63 8.95-28.84-35.16-23.4-51.36-22.3-1.45.86-9.46 26.19-10.07 29.76-.27 1.55.67 2.9 1.68 3.16zM103.01 198.47c28.16 2.58 46.94 19.79 38.93 49.64-2.74 10.2-8.04 13.95-15.21 20.73 31.87 7.39 29.9 55.37 2.12 67.18-2.57 1.09-14.74 4.76-16.66 4.76H28.03c-1.1 0-2.97-3.32-2.01-4.93l19.73-67.76-19.73-64.7c-.95-1.61.9-4.92 2.01-4.92 23.47 0 52.26-2.08 74.98 0zm-42.85 26.02c-1.47 1.17-1.77 1.28-1.71 3.16.08 2.55 8.75 28.93 10.06 29.8 14.42.66 44.86 6.11 45.86-15.48.35-7.68-6.71-17.49-14.43-17.49H60.15zm0 90.28c8.09 2.05 36.78 0 47.44 0 8.16 0 14.73-10.54 13.87-18.45-2.4-21.86-37.72-14.38-52.95-14.52-1.31.88-9.45 26.4-10.04 29.8-.27 1.56.67 2.91 1.68 3.16zM264.45 293.35c.46 21.38 29.03 29.22 44.94 18.15 3.68-2.56 4.02-7.4 9.34-7.24 1.78.05 19.93 5.2 20.55 6.07 4.39 6.21-13.01 22.02-18.31 25-32.04 18.03-80.9.59-85.43-38.32-5.3-45.48 19.56-79.85 67.75-72.33 20.51 3.2 40.73 21.84 40.73 43.42v22.95c0 1.26-1.03 2.3-2.3 2.3h-77.28zm52.02-22.96c-1.91-29.85-49.13-28.58-52.03 0z"/><path fill="currentColor" d="M187.17 224.49c4.79 1.48.59 21.42 3.06 21.44 1.68-9.36 13.18-21.44 22.95-21.44h32.13c.95 0 2.37 2.56 2.36 3.83-.03 3.23-5.82 5.07-11.44 13.1-2.44 3.48-4.9 11.82-7.63 13.79-6.49 4.7-24.65-2.98-34.04 6.51-1.06 1.07-4.96 4.13-5.1 9.43v67.33c0 1.26-1.03 2.3-2.3 2.3h-24.48c-1.26 0-2.3-1.03-2.3-2.3V226.77c0-.16 2.13-2.3 2.3-2.3 5.3 0 20.94-1.1 24.48 0zM357.25 257.64c0-.45.34-.81.79-.82 5.27-.07 34.86-.45 36.5.54 5.13 3.06 6.23 21.15-3.77 22.3-3.59.41-27.77.16-32.46.11-.44 0-.79-.36-.8-.8l-.27-21.33z"/></svg>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -954,8 +1431,8 @@
        Sección ESTÁTICA, fija en toda propuesta — no usa variables.
        Ver CLAUDE.md.
        ============================================================ -->
-  <section class="section" id="confianza">
-    <div class="container">
+  <section class="section section--blue" id="confianza">
+    <div class="container container--wide">
       <span class="section-number reveal">08</span>
       <h2 class="section-title reveal reveal--d1">Por qué confiar en nosotros</h2>
       <div class="results reveal reveal--d2">
@@ -964,23 +1441,28 @@
           <span class="results__subtitle">Caso de uso (clínica cliente)</span>
         </div>
         <div class="results-grid stagger-list">
-          <div class="card">
+          <div class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-calendar-check"></use></svg></span>
             <h3 class="scope-card__title">~617</h3>
             <p class="scope-card__desc">citas / mes automatizadas</p>
           </div>
-          <div class="card">
+          <div class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-trend-down"></use></svg></span>
             <h3 class="scope-card__title">70%</h3>
             <p class="scope-card__desc">menos carga en recepción</p>
           </div>
-          <div class="card">
+          <div class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-refresh"></use></svg></span>
             <h3 class="scope-card__title">~140</h3>
             <p class="scope-card__desc">citas recuperadas /mes</p>
           </div>
-          <div class="card">
+          <div class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-trend-up"></use></svg></span>
             <h3 class="scope-card__title">~$14M</h3>
             <p class="scope-card__desc">retorno por recuperación /mes</p>
           </div>
-          <div class="card">
+          <div class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-shield-check"></use></svg></span>
             <h3 class="scope-card__title">&lt;5%</h3>
             <p class="scope-card__desc">tasa de cancelación / ausentismo</p>
           </div>
@@ -992,7 +1474,7 @@
   <!-- ============================================================
        09. PRÓXIMO PASO — Cierre + CTA
        ============================================================ -->
-  <section class="section section--alt section--closing" id="cierre">
+  <section class="section section--closing section--premium" id="cierre">
     <div class="container">
       <span class="section-number reveal">09</span>
       <h2 class="section-title reveal reveal--d1">Próximo paso</h2>
@@ -1001,11 +1483,33 @@
       <div class="closing-footer reveal reveal--d4">
         <span class="brand__logo closing-footer__logo" aria-hidden="true"></span>
         <p class="closing-footer__company">ClaryTree Clinics</p>
-        <p class="closing-footer__contact">contacto.clarytree@gmail.com</p>
       </div>
     </div>
   </section>
   </main>
+
+  <!-- ============================================================
+       PIE DE PÁGINA — barra de marca fija (© + accesos directos +
+       región). Fijo en toda propuesta (no usa placeholders de plantilla). Ver
+       CLAUDE.md.
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="container container--wide site-footer__inner">
+      <p class="site-footer__copy">&copy; 2026 ClaryTree Clinics. Todos los derechos reservados.</p>
+      <nav class="site-footer__social" aria-label="Contacto y redes">
+        <a class="site-footer__link" href="https://wa.me/573115118640" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+        <a class="site-footer__link" href="mailto:contacto.clarytree@gmail.com" aria-label="Correo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </a>
+        <a class="site-footer__link" href="https://clarytree.com" target="_blank" rel="noopener" aria-label="Sitio web">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </a>
+      </nav>
+      <span class="site-footer__region">Colombia</span>
+    </div>
+  </footer>
 
 <script>
 (function(){
@@ -1036,6 +1540,21 @@
     var bg = layer.style.backgroundImage || '';
     if(!bg || bg.indexOf('[') !== -1){
       layer.remove();
+    }
+  }
+
+  function initHeroVideo(){
+    var video = document.querySelector('.hero__video');
+    if(!video) return;
+    // La velocidad no se puede fijar por atributo HTML: solo por JS. Se
+    // reaplica en loadedmetadata porque cargar la fuente puede resetearla.
+    function setRate(){ video.playbackRate = 0.5; }
+    setRate();
+    video.addEventListener('loadedmetadata', setRate);
+    // prefers-reduced-motion: no auto-reproducir; queda el poster estático.
+    if(prefersReduced){
+      video.removeAttribute('autoplay');
+      video.pause();
     }
   }
 
@@ -1078,7 +1597,13 @@
     function update(){
       var scrollY = window.scrollY || window.pageYOffset;
       var revealAt = hero ? hero.offsetHeight * 0.6 : window.innerHeight * 0.6;
-      nav.classList.toggle('site-nav--visible', scrollY > revealAt);
+      var isVisible = scrollY > revealAt;
+      nav.classList.toggle('site-nav--visible', isVisible);
+      /* La nav está fuera de pantalla por transform, no por display: sigue
+         siendo alcanzable con Tab si no se retira del árbol de foco.
+         inert la saca del foco/lectura de pantalla mientras está oculta. */
+      if(isVisible) nav.removeAttribute('inert');
+      else nav.setAttribute('inert', '');
 
       if(progressFill){
         var doc = document.documentElement;
@@ -1124,12 +1649,139 @@
     update();
   }
 
+  // Nodo que recorre la cadena de fases de "Cómo trabajamos": baja rodeando
+  // cada círculo SOBRE su borde (media vuelta, radio = radio del círculo, sin
+  // salirse) y entre círculos baja recto por el eje; al terminar el último
+  // sube a media opacidad por detrás de los círculos, en loop. La ruta se
+  // calcula leyendo la posición real de cada círculo, así se adapta a
+  // cualquier número de fases.
+  function initTimelineNode(){
+    if(prefersReduced) return;
+    var timeline = document.getElementById('timeline');
+    if(!timeline) return;
+    var node = document.createElement('span');
+    node.className = 'timeline__node';
+    node.setAttribute('aria-hidden', 'true');
+    timeline.appendChild(node);
+    if(!node.animate) return;
+
+    var STEPS = 16;
+    var downAnim, upAnim, path;
+
+    function circles(){
+      var tl = timeline.getBoundingClientRect();
+      return Array.prototype.map.call(timeline.querySelectorAll('.phase__number'), function(el){
+        var r = el.getBoundingClientRect();
+        return { x: r.left - tl.left + r.width / 2, y: r.top - tl.top + r.height / 2, R: r.width / 2 - 1 };
+      });
+    }
+
+    function buildPath(){
+      var cs = circles();
+      if(!cs.length) return null;
+      var cx = cs[0].x, pts = [];
+      cs.forEach(function(c){
+        for(var i = 0; i <= STEPS; i++){
+          var a = Math.PI * (i / STEPS);                   // 0..π = media vuelta por el borde
+          pts.push([cx + c.R * Math.sin(a), c.y - c.R * Math.cos(a)]);
+        }
+      });
+      return pts;
+    }
+
+    // Keyframes a velocidad constante (offset ∝ distancia) + easing linear en
+    // la bajada, para que los 3 rodeos vayan a la misma velocidad.
+    function frames(pts){
+      var total = 0, seg = [];
+      for(var i = 1; i < pts.length; i++){
+        var d = Math.hypot(pts[i][0] - pts[i-1][0], pts[i][1] - pts[i-1][1]);
+        seg.push(d); total += d;
+      }
+      var acc = 0;
+      return pts.map(function(p, i){
+        if(i > 0) acc += seg[i-1];
+        return { transform: 'translate(' + p[0].toFixed(1) + 'px,' + p[1].toFixed(1) + 'px)', offset: total ? acc/total : 0 };
+      });
+    }
+
+    function goDown(){
+      var p = buildPath();                                 // recalcula cada ciclo: se autoajusta
+      if(!p) return;
+      path = p;
+      // Cancelar la subida anterior (fill:forwards con opacity 0.5) para que no
+      // pise el opacity:1 de la bajada — la transparencia es solo de subida.
+      if(upAnim) upAnim.cancel();
+      if(downAnim) downAnim.cancel();
+      node.style.zIndex = '5';                             // por delante de los círculos
+      node.style.opacity = '1';
+      node.style.transform = 'translate(' + p[0][0].toFixed(1) + 'px,' + p[0][1].toFixed(1) + 'px)';
+      downAnim = node.animate(frames(path), { duration: 5600, easing: 'linear', fill: 'forwards' });
+      downAnim.onfinish = goUp;
+    }
+
+    function goUp(){
+      node.style.zIndex = '0';                             // por detrás de los círculos (oculto)
+      if(upAnim) upAnim.cancel();
+      var s = path[path.length - 1], e = path[0];          // de abajo del último a arriba del 1º, recto
+      upAnim = node.animate([
+        { transform: 'translate(' + e[0].toFixed(1) + 'px,' + s[1].toFixed(1) + 'px)', opacity: 0.5 },
+        { transform: 'translate(' + e[0].toFixed(1) + 'px,' + e[1].toFixed(1) + 'px)', opacity: 0.5 }
+      ], { duration: 3000, easing: 'ease-in-out', fill: 'forwards' });
+      upAnim.onfinish = goDown;
+    }
+
+    function restart(){
+      if(downAnim) downAnim.cancel();
+      if(upAnim) upAnim.cancel();
+      goDown();
+    }
+
+    // Arranca/reinicia solo cuando el timeline está a la vista y el reveal
+    // escalonado ya se asentó (~850ms), para medir las posiciones FINALES de
+    // los círculos (medir antes deja el nodo desalineado por el translateY de
+    // entrada de cada fase).
+    if(!('IntersectionObserver' in window)){ setTimeout(restart, 900); return; }
+    var startT;
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ clearTimeout(startT); startT = setTimeout(restart, 850); }
+      });
+    }, { threshold: 0.25 }).observe(timeline);
+
+    var rt;
+    window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(restart, 200); }, { passive: true });
+  }
+
+  function initScopeToggle(){
+    var grid = document.getElementById('scope-grid');
+    var toggle = document.getElementById('scope-grid-toggle');
+    if(!grid || !toggle) return;
+    var LIMIT = 4;
+    var cards = grid.querySelectorAll('.card');
+    if(cards.length <= LIMIT) return;
+
+    for(var i = LIMIT; i < cards.length; i++){
+      cards[i].classList.add('scope-card--collapsed');
+    }
+    toggle.hidden = false;
+    toggle.textContent = 'Ver ' + (cards.length - LIMIT) + ' más';
+    toggle.addEventListener('click', function(){
+      for(var i = 0; i < cards.length; i++){
+        cards[i].classList.remove('scope-card--collapsed');
+      }
+      toggle.hidden = true;
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function(){
     initHero();
     initVisionLayer();
+    initHeroVideo();
     initReveal();
     initSiteNav();
     initParallax();
+    initTimelineNode();
+    initScopeToggle();
   });
 })();
 </script>

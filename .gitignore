@@ -12,6 +12,15 @@ transcripts/
 .vercel
 node_modules/
 
+# Python
+__pycache__/
+*.pyc
+.venv/
+
 # SO
 .DS_Store
 Thumbs.db
+
+# Estado local de la skill impeccable (lockfiles de sesiones live, no repo state)
+.impeccable/live/server.json
+.impeccable/live/sessions/
