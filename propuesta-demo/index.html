@@ -562,6 +562,16 @@
   }
   .scope-grid__toggle:hover,
   .scope-grid__toggle:focus-visible{ color: var(--color-accent); border-color: var(--color-accent); }
+  /* El disclosure es solo para mobile: en desktop el grid auto-fit ya
+     acomoda 3 tarjetas por fila, así que 4 tarjetas visibles dejan una
+     única tarjeta sola en la segunda fila — el botón "ver más" ahí solo
+     completaría esa misma fila con las 2 restantes, sin ahorrar espacio
+     real. Por eso en desktop siempre se muestran todas. Mismo breakpoint
+     (641px) que usa el resto de la plantilla para mobile/desktop. */
+  @media (min-width: 641px){
+    .scope-card--collapsed{ display: block; }
+    .scope-grid__toggle{ display: none; }
+  }
   .card{
     position: relative;
     background: var(--color-surface);
@@ -928,6 +938,17 @@
     .site-nav__links{ display: none; }
     .brand--hero .brand__logo{ width: 38px; height: 44px; margin-right: 10px; }
     .brand--hero .brand__wordmark{ font-size: 1.25rem; }
+    /* .hero__meta usa justify-content:space-between pensado para el hero
+       ancho de desktop (logo a una esquina, fecha a la otra). En mobile el
+       logo+wordmark y la fecha+consecutivo suman casi el ancho completo del
+       viewport, así que space-between los deja pegados uno al otro sin
+       aire. Se apilan en dos filas con gap propio solo en esta versión. */
+    .hero__meta{
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 12px;
+    }
   }
 
   /* ==============================================================
