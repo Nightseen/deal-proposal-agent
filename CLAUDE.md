@@ -163,6 +163,8 @@ Además del WhatsApp del CTA, estos también son fijos (no variables) en toda pr
 
 Sitio estático + funciones serverless en `/api`, desplegado en Vercel conectado al repo de GitHub ([Nightseen/deal-proposal-agent](https://github.com/Nightseen/deal-proposal-agent)). Zero-config: Vercel sirve los `.html` como estáticos y `api/*.js` como funciones. Las variables de entorno de producción se configuran en el dashboard de Vercel (Project Settings → Environment Variables), no en `.env`.
 
+**Dominio de producción fijo:** `https://deal-proposal-agent.vercel.app`. Cada propuesta queda servida en `https://deal-proposal-agent.vercel.app/<slug>` (ej. `https://deal-proposal-agent.vercel.app/propuesta-clinica-sonrisa-real`). Todo push a `main` dispara un deploy automático vía la integración GitHub↔Vercel; el estado de ese deploy para un commit puntual se puede consultar sin autenticación en `https://api.github.com/repos/Nightseen/deal-proposal-agent/commits/<sha>/status` (lo usa el skill `generador-propuestas-comerciales` para confirmar el deploy antes de entregar el link — ver su `SKILL.md`, Paso 4). Si esa integración se cae (ya pasó una vez por un outage de GitHub, 2026-07-16), los pushes nuevos no disparan deploy hasta que se restablezca — no hay forma de saltárselo desde la CLI local porque no hay `vercel` instalado ni token configurado.
+
 ## Carpeta de grabaciones
 
 `Recording commercial calls/` contiene archivos pesados (grabaciones de videollamadas) y está excluida del repo vía `.gitignore`. No intentar commitear su contenido.

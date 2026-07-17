@@ -66,7 +66,12 @@ Con todo esto, redacta el contenido de cada sección de la propuesta (ver `refer
 ## Paso 4 — Confirmar, subir y responder
 
 1. Haz `git add`, commit y push a `main` (el usuario ya confirmó que esto se hace automático en cada propuesta nueva — no hace falta preguntar cada vez). Usa un mensaje de commit corto que mencione el cliente.
-2. Dile al usuario que la propuesta quedó creada y dale el slug final (ej. `propuesta-clinica-sonrisa-real`) para que sepa en qué URL la va a encontrar una vez Vercel la despliegue.
+2. Verifica el deploy antes de responder — no entregues el link a ciegas. El dominio fijo de producción es `https://deal-proposal-agent.vercel.app` (ver `## Despliegue` en `CLAUDE.md`). Los builds de este proyecto son rápidos (~10s), así que:
+   - Toma el sha del commit que acabas de pushear (`git rev-parse HEAD`).
+   - Consulta `https://api.github.com/repos/Nightseen/deal-proposal-agent/commits/<sha>/status` (API pública de GitHub, sin auth) y fíjate en el campo `state`.
+   - Si `state` es `success`, el deploy ya está listo. Si es `pending`, espera ~15s y vuelve a consultar (hasta ~2 minutos en total). Si es `failure`/`error`, avísale al usuario que el deploy falló en vez de entregar un link roto — no lo intentes arreglar tú solo, dile que revise el dashboard de Vercel.
+   - Nota: si esta consulta falla o Vercel/GitHub tienen un incidente (ver ejemplo real de esto en el historial del proyecto), dilo explícitamente en vez de asumir que el deploy salió bien.
+3. Entrega siempre el **link completo y clicable** de producción, no solo el slug: `https://deal-proposal-agent.vercel.app/<slug>` (ej. `https://deal-proposal-agent.vercel.app/propuesta-clinica-sonrisa-real`).
 
 ## Notas
 
