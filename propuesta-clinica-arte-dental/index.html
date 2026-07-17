@@ -4,144 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>document.documentElement.classList.add('js');</script>
-<title>ClaryTree Clinics — Propuesta para [NOMBRE_CLIENTE]</title>
+<title>ClaryTree Clinics — Propuesta para Clínica Arte Dental</title>
 <!-- Preconnect + <link> en vez de @import: el navegador descubre y
      empieza a pedir la fuente durante el parseo del HTML, sin esperar
      a que se parsee el CSS para encontrar el @import. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap">
-
-<!--
-====================================================================
-  PLANTILLA BASE — PROPUESTA COMERCIAL (ONE-PAGER)
-====================================================================
-  Este archivo es una BASE ESTRUCTURAL sin datos reales. Está pensado
-  para ser duplicado y rellenado automáticamente (por IA o a mano).
-
-  REGLA DE ORO: todo texto entre [CORCHETES_MAYUSCULA] es una
-  variable que DEBE reemplazarse antes de enviar la propuesta.
-  Lo único fijo es la estructura, los títulos de sección y los
-  textos de interfaz (botones, etiquetas).
-
-  ÍNDICE DE VARIABLES (agrupadas por sección)
-  --------------------------------------------------------------
-  GENERALES
-    NOMBRE_EMPRESA             Fijo: "ClaryTree Clinics" (título de la página
-                               y pie de la sección de cierre). No es una
-                               variable por reemplazar; igual en todas las
-                               duplicatas.
-    LOGO                       Fijo: isotipo de ClaryTree servido como
-                               archivo estático en /assets/clarytree_icon_navy.png
-                               (no embebido en base64, para no inflar el peso
-                               de cada propuesta). No es una variable por
-                               reemplazar; aparece en el hero y en la barra
-                               de navegación fija, igual en todas las
-                               duplicatas.
-    WORDMARK                   Fijo: texto "ClaryTree" junto al isotipo
-                               (hero y barra de navegación fija). No es una
-                               variable por reemplazar; igual en todas las
-                               duplicatas.
-    [FECHA]                    Fecha de la propuesta
-    [NUMERO_PROPUESTA]         Consecutivo de la propuesta, ej. "PROP-2026-001".
-                               Se autogenera en build-proposal.js si no se
-                               provee (cuenta las carpetas propuesta-* ya
-                               creadas, excluyendo propuesta-demo).
-    CONTACTO                   Fijo: "contacto.clarytree@gmail.com" (pie de
-                               la sección de cierre). No es una variable
-                               por reemplazar; igual en todas las duplicatas.
-    ENLACE_CONTACTO            Fijo: WhatsApp de la empresa (wa.me/573115118640)
-                               en el CTA final. No es una variable por
-                               reemplazar; igual en todas las duplicatas.
-    data-client-name           Atributo en <body> = mismo valor que
-                               [NOMBRE_CLIENTE]. Lo usa el script de
-                               notificación por Telegram (ver abajo). Debe
-                               quedar sincronizado con [NOMBRE_CLIENTE].
-
-  NOTIFICACIÓN POR TELEGRAM (obligatoria, ya implementada)
-    Al cargar la página se envía automáticamente un POST a /api/notify
-    con { cliente: <data-client-name> }. La función serverless en
-    /api/notify.js usa TELEGRAM_BOT_TOKEN y TELEGRAM_USER_ID (variables
-    de entorno fijas de la empresa, nunca hardcodeadas ni expuestas al
-    cliente) para enviar: "El cliente <NOMBRE_CLIENTE> acaba de abrir
-    la propuesta comercial". Este feature debe preservarse intacto en
-    toda propuesta futura duplicada de esta plantilla. Ver CLAUDE.md.
-
-  BARRA DE NAVEGACIÓN FIJA (obligatoria, ya implementada)
-    <nav id="site-nav"> justo después de <body>: logo + wordmark +
-    enlaces a 4 secciones (Entendimiento, Alcance, Inversión, Contacto)
-    + barra de progreso de scroll. Permanece oculta (translateY(-100%))
-    hasta que el usuario baja más allá del hero; a partir de ahí se
-    muestra fija arriba. La barra de progreso se actualiza en scroll
-    según cuánto del documento se ha recorrido. No usa variables — los
-    anchors son ids fijos de sección, iguales en toda propuesta. Este
-    feature debe preservarse intacto en toda propuesta futura duplicada
-    de esta plantilla.
-
-  01. PORTADA
-    [NOMBRE_CLIENTE]           Nombre del cliente o empresa cliente
-    Subtítulo: fijo "[NOMBRE_CLIENTE] + ClaryTree" — solo [NOMBRE_CLIENTE]
-                               es variable, no usa [NOMBRE_PROYECTO]
-    Título por defecto: "Propuesta comercial - Agente IA
-    para [NOMBRE_CLIENTE]" (fijo, no usa [TIPO_DE_SERVICIO])
-    VIDEO_HERO                 Fijo: video de fondo del hero servido en
-                               /assets/hero-v6-loop.mp4 (loop boomerang sin
-                               corte; autoplay, loop, muted, playsinline;
-                               velocidad 0.5x por JS), con poster
-                               /assets/hero-v6.jpg y un degradado hacia
-                               --color-bg por encima para que el texto siga
-                               legible. No es una variable por reemplazar;
-                               igual en todas las duplicatas.
-
-  02. ENTENDIMIENTO
-    [PARRAFO_ENTENDIMIENTO]    Bloque único: resumen cálido del proyecto
-
-  03. VISIÓN
-    [PARRAFO_VISION]           Bloque único: concepto y propuesta de valor
-    [IMAGEN_VISION]            (Opcional) URL de imagen decorativa con parallax
-
-  04. ALCANCE
-    [LISTA_ALCANCE]            Bloque único: la IA inyecta 4–8 tarjetas
-                                (ver plantilla de ítem en el comentario HTML).
-                                Cada tarjeta lleva un contenedor de ícono
-                                (.card__icon) anclado a la esquina superior
-                                izquierda, con un ícono elegido en rotación
-                                del sprite fijo <svg id="icon-sprite"> (ver
-                                justo después de <body>).
-
-  05. EXCLUSIONES
-    [LISTA_EXCLUSIONES]        Bloque único: la IA inyecta los ítems <li>,
-                                mismo estilo de tarjeta (.card) y título en
-                                negrilla (.scope-card__title) que Alcance,
-                                con el mismo contenedor de ícono (.card__icon)
-                                pero siempre con el ícono #icon-ban.
-
-  06. FASES Y TIEMPOS
-    [FASES]                    Bloque único: la IA inyecta los bloques de fase,
-                                cada uno con [FASE_NOMBRE], [FASE_DESCRIPCION],
-                                [FASE_TIEMPO] (ver plantilla en el comentario HTML)
-    [NOTA_TIEMPOS]             Aclaración de que los tiempos son aproximados
-
-  07. INVERSIÓN
-    [PRECIO]                   Monto/rango de inversión
-    [FORMA_DE_PAGO]            (Opcional) condiciones de flexibilidad de pago
-                                (anticipo, hitos, etc.). Sin botón de CTA —
-                                el único CTA de la propuesta es el de cierre.
-
-  08. CONFIANZA
-    Sección ESTÁTICA — no usa variables. Módulo fijo "Resultados
-    comprobados" (caso de uso real) con 5 tarjetas de cifras, mismo
-    estilo y colores (.card/.scope-card__title/.scope-card__desc) que
-    Alcance, cada una con su propio ícono fijo (.card__icon) elegido a
-    mano por métrica. Igual en toda propuesta; no se toca al duplicar
-    la plantilla.
-
-  09. CIERRE
-    [PARRAFO_CIERRE]           Bloque único: mensaje breve de cierre
-    [TEXTO_CTA]                Texto del botón principal (ej. "Hablemos por WhatsApp")
-  --------------------------------------------------------------
-====================================================================
--->
 
 <style>
   /* ==============================================================
@@ -1234,7 +1103,7 @@
   }
 </style>
 </head>
-<body data-client-name="[NOMBRE_CLIENTE]">
+<body data-client-name="Clínica Arte Dental">
 
   <!-- ============================================================
        SPRITE DE ÍCONOS — símbolos reutilizados por .card__icon en
@@ -1300,10 +1169,10 @@
           <span class="brand__logo" aria-hidden="true"></span>
           <span class="brand__wordmark">Clary<span class="brand__wordmark-accent">Tree</span></span>
         </a>
-        <span class="hero__date"><span class="hero__date-value">[FECHA]</span><span class="hero__date-sep" aria-hidden="true">&bull;</span><span class="hero__date-number">[NUMERO_PROPUESTA]</span></span>
+        <span class="hero__date"><span class="hero__date-value">16 de julio de 2026</span><span class="hero__date-sep" aria-hidden="true">&bull;</span><span class="hero__date-number">PROP-2026-003</span></span>
       </div>
-      <h1 class="hero__title" data-hero-title>Propuesta comercial - Agente IA para [NOMBRE_CLIENTE]</h1>
-      <p class="hero__subtitle">[NOMBRE_CLIENTE] + ClaryTree</p>
+      <h1 class="hero__title" data-hero-title>Propuesta comercial - Agente IA para Clínica Arte Dental</h1>
+      <p class="hero__subtitle">Clínica Arte Dental + ClaryTree</p>
       <div class="hero__divider" aria-hidden="true"></div>
       <a href="#entendimiento" class="btn btn--primary hero__cta">Ver propuesta completa</a>
     </div>
@@ -1316,7 +1185,7 @@
     <div class="container">
       <span class="section-number reveal">02</span>
       <h2 class="section-title reveal reveal--d1">Entendimos lo que buscas</h2>
-      <p class="section-text reveal reveal--d2">[PARRAFO_ENTENDIMIENTO]</p>
+      <p class="section-text reveal reveal--d2">Clínica Arte Dental es una clínica consolidada, con una agenda que se llena principalmente por recomendación y buena reputación. Ese mismo crecimiento trae un reto operativo: la recepción concentra llamadas, mensajes de WhatsApp y el agendamiento manual de citas, todo al mismo tiempo, y en las horas de mayor demanda inevitablemente algo queda esperando — un mensaje sin responder, una cita sin confirmar, un paciente que no vuelve a saber de la clínica. Es un problema de volumen, no de servicio: el equipo de Arte Dental atiende bien a quien tiene enfrente, pero no alcanza a estar en todos los canales a la vez.</p>
     </div>
   </section>
 
@@ -1324,12 +1193,10 @@
        03. NUESTRA VISIÓN — scroll reveal + parallax sutil
        ============================================================ -->
   <section class="section vision section--blue" id="vision">
-    <!-- OPCIONAL: si no hay [IMAGEN_VISION], eliminar la capa siguiente -->
-    <div class="vision__layer" data-parallax="0.2" style="background-image:url('[IMAGEN_VISION]');" aria-hidden="true"></div>
     <div class="container">
       <span class="section-number reveal">03</span>
       <h2 class="section-title reveal reveal--d1">Nuestra visión para tu negocio</h2>
-      <p class="section-text reveal reveal--d2">[PARRAFO_VISION]</p>
+      <p class="section-text reveal reveal--d2">El objetivo es que Clínica Arte Dental pueda seguir creciendo sin que ese crecimiento se traduzca en más carga para el equipo de recepción. Un agente que responda cada mensaje al instante, mantenga la agenda organizada y llena con las citas correctas, y vuelva a contactar a los pacientes que se quedaron en el camino — para que la atención se sienta igual de cuidada sin importar cuántos pacientes escriban a la vez.</p>
     </div>
   </section>
 
@@ -1341,18 +1208,31 @@
       <span class="section-number reveal">04</span>
       <h2 class="section-title reveal reveal--d1">Qué incluye el servicio</h2>
       <div class="scope-grid stagger-list" id="scope-grid">
-        <!--
-          La IA debe reemplazar [LISTA_ALCANCE] por 4–8 tarjetas con esta estructura:
+        <article class="card card--icon scope-card">
+            <span class="card__icon"><svg><use href="#icon-check"></use></svg></span>
+            <h3 class="scope-card__title">Agente de WhatsApp 24/7</h3>
+            <p class="scope-card__desc">Responde cada mensaje entrante al instante, resuelve preguntas frecuentes sobre tratamientos, horarios y precios base, y deriva a un humano cuando la conversación lo requiere.</p>
+          </article>
+          <article class="card card--icon scope-card">
+            <span class="card__icon"><svg><use href="#icon-chat"></use></svg></span>
+            <h3 class="scope-card__title">Agendamiento y confirmación de citas</h3>
+            <p class="scope-card__desc">Agenda, reprograma y confirma citas directamente desde WhatsApp, sincronizado con el calendario del consultorio.</p>
+          </article>
+          <article class="card card--icon scope-card">
+            <span class="card__icon"><svg><use href="#icon-calendar"></use></svg></span>
+            <h3 class="scope-card__title">Recordatorios automáticos</h3>
+            <p class="scope-card__desc">Envía recordatorios antes de cada cita para reducir cancelaciones de último momento e inasistencias.</p>
+          </article>
+          <article class="card card--icon scope-card">
+            <span class="card__icon"><svg><use href="#icon-chart"></use></svg></span>
+            <h3 class="scope-card__title">Reactivación de pacientes inactivos</h3>
+            <p class="scope-card__desc">Identifica pacientes que no han vuelto en varios meses y les escribe para ofrecerles un nuevo horario disponible.</p>
+          </article>
           <article class="card card--icon scope-card">
             <span class="card__icon"><svg><use href="#icon-check"></use></svg></span>
-            <h3 class="scope-card__title">[TITULO_ITEM]</h3>
-            <p class="scope-card__desc">[DESCRIPCION_ITEM]</p>
+            <h3 class="scope-card__title">Resumen semanal de gestión</h3>
+            <p class="scope-card__desc">Un reporte breve con el volumen de conversaciones, citas agendadas y pacientes reactivados, para que el equipo tenga visibilidad sin tener que revisarlo manualmente.</p>
           </article>
-          El ícono rota entre #icon-check, #icon-chat, #icon-calendar e
-          #icon-chart según la posición del ítem (ver iconos definidos en
-          el sprite <svg id="icon-sprite"> justo después de <body>).
-        -->
-        [LISTA_ALCANCE]
       </div>
       <button type="button" class="scope-grid__toggle" id="scope-grid-toggle" hidden>Ver todo el alcance</button>
     </div>
@@ -1366,13 +1246,18 @@
       <span class="section-number reveal">05</span>
       <h2 class="section-title reveal reveal--d1">Qué no incluye</h2>
       <ul class="exclusions-list stagger-list" id="exclusions-list">
-        <!-- La IA debe reemplazar [LISTA_EXCLUSIONES] por ítems:
-          <li class="card card--icon">
+        <li class="card card--icon">
             <span class="card__icon"><svg><use href="#icon-ban"></use></svg></span>
-            <h3 class="scope-card__title">[TEXTO_EXCLUSION]</h3>
+            <h3 class="scope-card__title">Integración con Instagram o Facebook Messenger (por ahora el agente opera solo en WhatsApp)</h3>
           </li>
-        -->
-        [LISTA_EXCLUSIONES]
+        <li class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-ban"></use></svg></span>
+            <h3 class="scope-card__title">Conexión con el software de historia clínica de Arte Dental (se evaluará en una fase posterior)</h3>
+          </li>
+        <li class="card card--icon">
+            <span class="card__icon"><svg><use href="#icon-ban"></use></svg></span>
+            <h3 class="scope-card__title">Cobros o pagos en línea dentro del chat</h3>
+          </li>
       </ul>
     </div>
   </section>
@@ -1387,21 +1272,33 @@
       <div class="timeline reveal" id="timeline">
         <div class="timeline__line" aria-hidden="true"></div>
         <div class="timeline__items stagger-list">
-          <!--
-            La IA debe reemplazar [FASES] por N bloques con esta estructura:
-            <div class="phase">
-              <span class="phase__number">01</span>
-              <div class="phase__content">
-                <h3 class="phase__name">[FASE_NOMBRE]</h3>
-                <p class="phase__desc">[FASE_DESCRIPCION]</p>
-                <span class="phase__time">[FASE_TIEMPO]</span>
-              </div>
+          <div class="phase">
+            <span class="phase__number">01</span>
+            <div class="phase__content">
+              <h3 class="phase__name">Configuración y entrenamiento del agente</h3>
+              <p class="phase__desc">Cargamos el tono, los tratamientos y las preguntas frecuentes de Arte Dental.</p>
+              <span class="phase__time">2 días</span>
             </div>
-          -->
-          [FASES]
+          </div>
+          <div class="phase">
+            <span class="phase__number">02</span>
+            <div class="phase__content">
+              <h3 class="phase__name">Conexión con WhatsApp Business y calendario</h3>
+              <p class="phase__desc">Integramos el número de WhatsApp de la clínica y sincronizamos la agenda existente.</p>
+              <span class="phase__time">2 días</span>
+            </div>
+          </div>
+          <div class="phase">
+            <span class="phase__number">03</span>
+            <div class="phase__content">
+              <h3 class="phase__name">Pruebas con el equipo y ajuste final</h3>
+              <p class="phase__desc">Simulamos conversaciones reales junto al equipo de recepción antes de activar el agente.</p>
+              <span class="phase__time">1 día</span>
+            </div>
+          </div>
         </div>
       </div>
-      <p class="timeline__note reveal">[NOTA_TIEMPOS]</p>
+      <p class="timeline__note reveal">Los tiempos son aproximados y pueden variar según la disponibilidad del equipo de Arte Dental para las pruebas finales.</p>
     </div>
   </section>
 
@@ -1413,9 +1310,9 @@
       <span class="section-number reveal">07</span>
       <h2 class="section-title reveal reveal--d1">La inversión</h2>
       <div class="investment-card reveal reveal--d2">
-        <p class="investment-card__price">[PRECIO]</p>
-        <!-- OPCIONAL: si no hay [FORMA_DE_PAGO], eliminar este párrafo -->
-        <p class="investment-card__terms">[FORMA_DE_PAGO]</p>
+        <p class="investment-card__price">$3.500.000 COP</p>
+        <!-- OPCIONAL: si no hay 50% para iniciar, 50% contra entrega, eliminar este párrafo -->
+        <p class="investment-card__terms">50% para iniciar, 50% contra entrega</p>
         <!-- Línea de ROI: copy FIJO de marca (ancla el precio al caso probado
              de la sección 08). No es variable por propuesta. -->
         <p class="investment-card__roi">Con la recuperación de ~140 citas/mes, el retorno estimado supera los <strong>$14M mensuales</strong>: la inversión se paga en las primeras semanas de operación.</p>
@@ -1499,8 +1396,8 @@
     <div class="container">
       <span class="section-number reveal">09</span>
       <h2 class="section-title reveal reveal--d1">Próximo paso</h2>
-      <p class="section-text reveal reveal--d2">[PARRAFO_CIERRE]</p>
-      <a href="https://wa.me/573115118640" target="_blank" rel="noopener" class="btn btn--cta reveal reveal--d3">[TEXTO_CTA]</a>
+      <p class="section-text reveal reveal--d2">Un agente de IA trabajando para Arte Dental antes de que termine la semana, respondiendo a cada paciente al instante y sosteniendo la misma calidad de atención que hoy distingue a la clínica, sin importar cuántas conversaciones lleguen a la vez. El siguiente paso es solo confirmar y arrancamos.</p>
+      <a href="https://wa.me/573115118640" target="_blank" rel="noopener" class="btn btn--cta reveal reveal--d3">Hablemos por WhatsApp</a>
       <div class="closing-footer reveal reveal--d4">
         <span class="brand__logo closing-footer__logo" aria-hidden="true"></span>
         <p class="closing-footer__company">ClaryTree Clinics</p>
